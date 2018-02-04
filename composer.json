@@ -1,0 +1,22 @@
+{
+    "name": "dpc-sdp/bay",
+    "description": "Configuration for integration with Bay hosting platform",
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "version": "0.0.1",
+    "require": {
+        "drupal/cloudflare": "^1.0@alpha",
+        "drupal/cloudfront_purger": "^1.1",
+        "drupal/purge": "^3.0@beta",
+        "drupal/purge_queuer_url": "^1.0@RC",
+        "drupal/redis": "^1.0@RC"
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true
+}
