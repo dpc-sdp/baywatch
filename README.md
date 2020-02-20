@@ -1,1 +1,2 @@
-Drupal module dependencies for the SDP Platform.
+# bay
+Configuration for integration with Bay hosting platform
