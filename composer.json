@@ -1,5 +1,5 @@
 {
-    "name": "dpc-sdp/bay",
+    "name": "dpc-sdp/baywatch",
     "description": "Configuration for integration with Bay hosting platform",
     "type": "drupal-module",
     "license": "GPL-2.0+",

@@ -1,0 +1,7 @@
+# Ignore local dev files.
+.data
+screenshots
+/local
+
+# Ignore IDE settings.
+.idea

@@ -1,4 +1,4 @@
-name: Bay
+name: baywatch
 description: 'Configuration for integration with Bay hosting platform'
 type: module
 package: Other
