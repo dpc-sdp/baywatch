@@ -4,8 +4,6 @@ type: module
 package: Other
 core: 8.x
 dependencies:
-  - cloudflare:cloudflare
-  - cloudfront_purger:cloudfront_purger
   - purge:purge
   - purge_queuer_url:purge_queuer_url
   - redis:redis
