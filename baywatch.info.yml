@@ -5,6 +5,7 @@ package: Other
 core: 8.x
 dependencies:
   - purge:purge
+  - purge:purge_ui
   - purge_queuer_url:purge_queuer_url
   - redis:redis
   - section_purger
