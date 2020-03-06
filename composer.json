@@ -2,7 +2,7 @@
     "name": "dpc-sdp/baywatch",
     "description": "Configuration for integration with Bay hosting platform",
     "type": "drupal-module",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "version": "0.0.1",
     "require": {
         "drupal/purge": "^3.0@beta",
