@@ -2,6 +2,8 @@
 .data
 screenshots
 /local
+vendor
+composer.lock
 
 # Ignore IDE settings.
 .idea
