@@ -13,3 +13,21 @@ function baywatch_install() {
   }
 }
 
+/**
+ * Import sdpa password policy.
+ */
+function baywatch_update_8001() {
+  if (\Drupal::moduleHandler()->moduleExists('password_policy')) {
+    // Remove default password policy if exists.
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('password_policy.password_policy.default');
+    $default_id = $config->get('id');
+    if (empty($default_id)) {
+      $config->delete();
+    }
+    // Import the sdpa password policy.
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'tide_core') . '/config/install'];
+    _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
+  }
+}
