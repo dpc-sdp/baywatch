@@ -31,7 +31,7 @@ function baywatch_import_sdpa_password_policy() {
     }
     // Import the sdpa password policy.
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'tide_core') . '/config/install'];
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/install'];
     _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
   }
 }
