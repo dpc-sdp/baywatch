@@ -11,5 +11,34 @@ function baywatch_install() {
   if (\Drupal::service('module_handler')->moduleExists('bay')) {
     \Drupal::service('module_installer')->uninstall('bay');
   }
+
+  // This Will import password policy during first install of the module.
+  baywatch_import_sdpa_password_policy();
 }
 
+/**
+ * Import sdpa password policy.
+ */
+function baywatch_import_sdpa_password_policy() {
+  if (\Drupal::moduleHandler()->moduleExists('password_policy')) {
+    // Remove default password policy if exists.
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('password_policy.password_policy.default');
+    $default_id = $config->get('id');
+    if (!empty($default_id)) {
+      $config->delete();
+      echo "Password policy with id " . $default_id . " has been deleted.\n";
+    }
+    // Import the sdpa password policy.
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/install'];
+    _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
+  }
+}
+
+/**
+ * Import sdpa password policy as an update.
+ */
+function baywatch_update_8001() {
+  baywatch_import_sdpa_password_policy();
+}
