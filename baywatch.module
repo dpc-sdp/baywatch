@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ *
+ * Procedural hooks for baywatch module.
+ */
+
+/**
+ * Implements hook_mail_alter().
+ */
+function baywatch_mail_alter(&$message) {
+  // Ensures that the Reply-To header points to a no-reply address if it is
+  // using the default value. This is to ensure the SES verified address
+  // doesn't get spammed. The second check ensures that modules which change
+  // the reply-to (such as webform) still function correctly.
+  //
+  // The SMTP_REPLYTO environment variable is set in lagoon.
+  $reply_to = getenv("SMTP_REPLYTO") ?: '';
+  if ($reply_to && ($message['from'] == $message['reply-to'])) {
+    $message['reply-to'] = $reply_to;
+  }
+}
