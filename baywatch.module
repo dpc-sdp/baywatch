@@ -19,5 +19,6 @@ function baywatch_mail_alter(&$message) {
   $reply_to = getenv("SMTP_REPLYTO") ?: '';
   if ($reply_to && ($message['from'] == $message['reply-to'])) {
     $message['reply-to'] = $reply_to;
+    $message['headers']['Reply-to'] = $reply_to;
   }
 }
