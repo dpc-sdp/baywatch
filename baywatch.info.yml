@@ -9,5 +9,7 @@ dependencies:
   - purge:purge_processor_lateruntime
   - purge:purge_queuer_coretags
   - purge:purge_ui
+  - queue_mail:queue_mail
   - redis:redis
   - section_purger
+  - smtp:smtp
