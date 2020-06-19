@@ -53,6 +53,6 @@ function baywatch_update_8001() {
 function baywatch_update_8002() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('queue_mail.settings');
-  $config->set('queue_mail_keys', '');
+  $config->set('queue_mail_keys', '*');
   $config->save();
 }
