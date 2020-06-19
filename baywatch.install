@@ -14,6 +14,9 @@ function baywatch_install() {
 
   // This Will import password policy during first install of the module.
   baywatch_import_sdpa_password_policy();
+
+  // Ensure queue_mail is configured to handle all mail.
+  baywatch_update_8002();
 }
 
 /**
@@ -41,4 +44,15 @@ function baywatch_import_sdpa_password_policy() {
  */
 function baywatch_update_8001() {
   baywatch_import_sdpa_password_policy();
+}
+
+/**
+ * Strip the previously configured "queue_mail_keys" as now all mail should go
+ * through the queue.
+ */
+function baywatch_update_8002() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('queue_mail.settings');
+  $config->set('queue_mail_keys', '');
+  $config->save();
 }
