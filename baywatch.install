@@ -29,10 +29,16 @@ function baywatch_import_sdpa_password_policy() {
       $config->delete();
       echo "Password policy with id " . $default_id . " has been deleted.\n";
     }
-    // Import the sdpa password policy.
-    module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/install'];
-    _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
+    // Check if the sdpa password policy already exists in the project.
+    $config = $config_factory->getEditable('password_policy.password_policy.password_policy_sdpa');
+    $sdpa_policy_id = $config->get('id');
+    // Import the sdpa password policy only if it doesn not exists in the project.
+    if (empty($sdpa_policy_id)) {
+      module_load_include('inc', 'tide_core', 'includes/helpers');
+      $config_location = [drupal_get_path('module', 'baywatch') . '/config/install'];
+      _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
+      echo "SDPA password policy is imported successfully.\n";
+    }
   }
 }
 
