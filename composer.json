@@ -3,7 +3,6 @@
     "description": "Configuration for integration with Bay hosting platform",
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
-    "version": "0.0.3",
     "require": {
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
