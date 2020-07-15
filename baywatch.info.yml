@@ -14,5 +14,5 @@ dependencies:
   - section_purger
   - smtp:smtp
 config_devel:
-  install:
+  optional:
   - password_policy.password_policy.password_policy_sdpa
