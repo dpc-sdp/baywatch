@@ -7,7 +7,9 @@
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
         "drupal/redis": "^1.0@RC",
-        "drupal/section_purger": "0.2.3"
+        "drupal/section_purger": "0.2.3",
+        "drupal/smtp": "^1.0@RC",
+        "drupal/queue_mail": "^1"
     },
     "repositories": {
         "drupal": {

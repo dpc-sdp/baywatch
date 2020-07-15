@@ -9,8 +9,10 @@ dependencies:
   - purge:purge_processor_lateruntime
   - purge:purge_queuer_coretags
   - purge:purge_ui
+  - queue_mail:queue_mail
   - redis:redis
   - section_purger
+  - smtp:smtp
 config_devel:
-  install:
+  optional:
   - password_policy.password_policy.password_policy_sdpa
