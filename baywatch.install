@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Install file for SDP Platform Drupal Modules.
@@ -47,10 +48,17 @@ function baywatch_update_8001() {
 }
 
 /**
+ * Updates queue_mail settings.
+ *
  * Strip the previously configured "queue_mail_keys" as now all mail should go
  * through the queue.
  */
 function baywatch_update_8002() {
+  // Check if queue_mail is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('queue_mail') === FALSE) {
+    // If not, install the queue_mail module.
+    \Drupal::service('module_installer')->install(['queue_mail']);
+  }
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('queue_mail.settings');
   $config->set('queue_mail_keys', '*');
