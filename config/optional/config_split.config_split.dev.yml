@@ -1,0 +1,20 @@
+langcode: en
+status: false
+dependencies: {  }
+id: dev
+label: dev
+description: ''
+folder: ../config/dev
+module:
+  devel_generate: 0
+theme: {  }
+blacklist: {  }
+graylist:
+  - clamav.settings
+  - config_ignore.settings
+  - elasticsearch_connector.cluster.elasticsearch_bay
+  - simple_sitemap.settings
+  - key.key.authenticated_content
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 1

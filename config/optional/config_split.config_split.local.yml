@@ -1,0 +1,25 @@
+langcode: en
+status: false
+dependencies: {  }
+id: local
+label: local
+description: ''
+folder: ../config/local
+module:
+  config_devel: 0
+  dblog: 0
+  devel_generate: 0
+  field_tools: 0
+  views_ui: 0
+theme: {  }
+blacklist: {  }
+graylist:
+  - clamav.settings
+  - config_devel.settings
+  - elasticsearch_connector.cluster.elasticsearch_bay
+  - simple_sitemap.settings
+  - tide_media.settings
+  - views.settings
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 0
