@@ -1,0 +1,18 @@
+langcode: en
+status: false
+dependencies: {  }
+id: ci
+label: ci
+description: ''
+folder: ../config/ci
+module: {  }
+theme: {  }
+blacklist: {  }
+graylist:
+  - clamav.settings
+  - elasticsearch_connector.cluster.elasticsearch_bay
+  - simple_sitemap.settings
+  - tide_media.settings
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 2
