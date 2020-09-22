@@ -64,3 +64,27 @@ function baywatch_update_8002() {
   $config->set('queue_mail_keys', '*');
   $config->save();
 }
+
+/**
+ * [DDIDO-256] Clean up orphaned tables from failed core update.
+ */
+function baywatch_update_8003() {
+  $tables = [];
+  $r = \Drupal::database()->query("SHOW TABLES LIKE 'old_%'");
+  $rows = $r->fetchCol();
+  if (!empty($rows)) {
+    foreach ($rows as $row) {
+      $tables[] = $row;
+    }
+  }
+
+  foreach ($tables as $table) {
+    try {
+      \Drupal::messenger()->addMessage("Dropping obsolete table ${table}");
+      \Drupal::database()->query(sprintf("DROP TABLE %s;", $table));
+    } catch (\Exception $e) {
+      \Drupal::messenger()->addMessage("Error when dropping table ${table}");
+      \Drupal::logger('baywatch')->error($e->getMessage());
+    }
+  }
+}
