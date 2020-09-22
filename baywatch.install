@@ -5,6 +5,7 @@
  * Install file for SDP Platform Drupal Modules.
  */
 
+use Drupal\Core\Serialization\Yaml;
 /**
  * Implements hook_install().
  */
@@ -18,6 +19,12 @@ function baywatch_install() {
 
   // Ensure queue_mail is configured to handle all mail.
   baywatch_update_8002();
+
+  // Import key.key.authenticated_content.
+  baywatch_update_8003();
+
+  // Import config_split configs.
+  baywatch_update_8004();
 }
 
 /**
@@ -85,6 +92,56 @@ function baywatch_update_8003() {
     } catch (\Exception $e) {
       \Drupal::messenger()->addMessage("Error when dropping table ${table}");
       \Drupal::logger('baywatch')->error($e->getMessage());
+    }
+  }
+}
+
+/**
+ * Import authenticated_content key.
+ */
+function baywatch_update_8004() {
+  $configs = [
+    'key.key.authenticated_content' => 'key',
+  ];
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  // Check if field already exported to config/sync.
+  foreach ($configs as $config => $type) {
+    $config_read = _tide_read_config($config, $config_location, TRUE);
+    $storage = \Drupal::entityTypeManager()->getStorage($type);
+    $id = substr($config, strrpos($config, '.') + 1);
+    if ($storage->load($id) == NULL) {
+      $config_entity = $storage->createFromStorageRecord($config_read);
+      $config_entity->save();
+    }
+  }
+}
+
+/**
+ * Update config_split configs.
+ */
+function baywatch_update_8005() {
+  $configs = [
+    'config_split.config_split.ci' => 'config_split',
+    'config_split.config_split.dev' => 'config_split',
+    'config_split.config_split.local' => 'config_split',
+  ];
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  // Check if field already exported to config/sync.
+  foreach ($configs as $config => $type) {
+    $config_read = _tide_read_config($config, $config_location, TRUE);
+    $storage = \Drupal::entityTypeManager()->getStorage($type);
+    $id = substr($config, strrpos($config, '.') + 1);
+    if ($storage->load($id) == NULL) {
+      $config_entity = $storage->createFromStorageRecord($config_read);
+      $config_entity->save();
+    }
+    else {
+      $file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
+      $config_values = Yaml::decode(file_get_contents($file));
+      $config = \Drupal::configFactory()->getEditable($config);
+      $config->set('graylist', $config_values['graylist'])->save();
     }
   }
 }
