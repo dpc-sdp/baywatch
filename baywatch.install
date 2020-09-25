@@ -23,8 +23,11 @@ function baywatch_install() {
   // Import key.key.authenticated_content.
   baywatch_update_8003();
 
-  // Import config_split configs.
+  // Import authenticated_content key.
   baywatch_update_8004();
+
+  // Change config_split settings.
+  baywatch_update_8005();
 }
 
 /**
@@ -40,10 +43,20 @@ function baywatch_import_sdpa_password_policy() {
       $config->delete();
       echo "Password policy with id " . $default_id . " has been deleted.\n";
     }
-    // Import the sdpa password policy.
+    $configs = [
+      'password_policy.password_policy.password_policy_sdpa' => 'password_policy',
+    ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
     $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
-    _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
+    foreach ($configs as $config => $type) {
+      $config_read = _tide_read_config($config, $config_location, TRUE);
+      $storage = \Drupal::entityTypeManager()->getStorage($type);
+      $id = substr($config, strrpos($config, '.') + 1);
+      if ($storage->load($id) == NULL) {
+        $config_entity = $storage->createFromStorageRecord($config_read);
+        $config_entity->save();
+      }
+    }
   }
 }
 
