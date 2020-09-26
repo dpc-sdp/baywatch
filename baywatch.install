@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Serialization\Yaml;
+
 /**
  * Implements hook_install().
  */
@@ -102,7 +103,8 @@ function baywatch_update_8003() {
     try {
       \Drupal::messenger()->addMessage("Dropping obsolete table ${table}");
       \Drupal::database()->query(sprintf("DROP TABLE %s;", $table));
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       \Drupal::messenger()->addMessage("Error when dropping table ${table}");
       \Drupal::logger('baywatch')->error($e->getMessage());
     }
@@ -151,10 +153,20 @@ function baywatch_update_8005() {
       $config_entity->save();
     }
     else {
-      $file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
-      $config_values = Yaml::decode(file_get_contents($file));
-      $config = \Drupal::configFactory()->getEditable($config);
-      $config->set('graylist', $config_values['graylist'])->save();
+      $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
+      $inactive_config_values = Yaml::decode(file_get_contents($config_file));
+      $inactive_graylist = $inactive_config_values['graylist'];
+      $active_config = \Drupal::configFactory()->getEditable($config);
+      $active_graylist = $active_config->get('graylist');
+      if ($config == 'config_split.config_split.dev') {
+        if (in_array('clamav.settings', $active_graylist)) {
+          if (($key = array_search('clamav.settings', $active_graylist)) !== FALSE) {
+            unset($active_graylist[$key]);
+          }
+        }
+      }
+      $result = array_unique(array_merge($active_graylist, $inactive_graylist));
+      $active_config->set('graylist', $result)->save();
     }
   }
 }
