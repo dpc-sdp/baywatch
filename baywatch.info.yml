@@ -9,6 +9,14 @@ dependencies:
   - purge:purge_processor_lateruntime
   - purge:purge_queuer_coretags
   - purge:purge_ui
+  - password_policy:password_policy
+  - password_policy_character_types:password_policy_character_types
+  - password_policy_characters:password_policy_characters
+  - password_policy_consecutive:password_policy_consecutive
+  - password_policy_history:password_policy_history
+  - password_policy_length:password_policy_length
+  - password_policy_username:password_policy_username
+  - password_strength:password_strength
   - queue_mail:queue_mail
   - redis:redis
   - section_purger
