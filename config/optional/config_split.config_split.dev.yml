@@ -10,7 +10,6 @@ module:
 theme: {  }
 blacklist: {  }
 graylist:
-  - clamav.settings
   - config_ignore.settings
   - elasticsearch_connector.cluster.elasticsearch_bay
   - simple_sitemap.settings

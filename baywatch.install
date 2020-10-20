@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Serialization\Yaml;
+
 /**
  * Implements hook_install().
  */
@@ -23,27 +24,66 @@ function baywatch_install() {
   // Import key.key.authenticated_content.
   baywatch_update_8003();
 
-  // Import config_split configs.
+  // Import authenticated_content key.
   baywatch_update_8004();
+
+  // Change config_split settings.
+  baywatch_update_8005();
 }
 
 /**
  * Import sdpa password policy.
  */
 function baywatch_import_sdpa_password_policy() {
-  if (\Drupal::moduleHandler()->moduleExists('password_policy')) {
-    // Remove default password policy if exists.
-    $config_factory = \Drupal::configFactory();
-    $config = $config_factory->getEditable('password_policy.password_policy.default');
-    $default_id = $config->get('id');
-    if (!empty($default_id)) {
-      $config->delete();
-      echo "Password policy with id " . $default_id . " has been deleted.\n";
+  $module_installer = \Drupal::service('module_installer');
+  $module_handler = \Drupal::moduleHandler();
+  // Enables required password_policy module.
+  if (!$module_handler->moduleExists('password_policy')) {
+    $module_installer->install(['password_policy']);
+  }
+  // Enables required sub modules.
+  if (!$module_handler->moduleExists('password_policy_character_types')) {
+    $module_installer->install(['password_policy_character_types']);
+  }
+  if (!$module_handler->moduleExists('password_policy_characters')) {
+    $module_installer->install(['password_policy_characters']);
+  }
+  if (!$module_handler->moduleExists('password_policy_consecutive')) {
+    $module_installer->install(['password_policy_consecutive']);
+  }
+  if (!$module_handler->moduleExists('password_policy_history')) {
+    $module_installer->install(['password_policy_history']);
+  }
+  if (!$module_handler->moduleExists('password_policy_length')) {
+    $module_installer->install(['password_policy_length']);
+  }
+  if (!$module_handler->moduleExists('password_policy_username')) {
+    $module_installer->install(['password_policy_username']);
+  }
+  if (!$module_handler->moduleExists('password_strength')) {
+    $module_installer->install(['password_strength']);
+  }
+  // Remove default password policy if exists.
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('password_policy.password_policy.default');
+  $default_id = $config->get('id');
+  if (!empty($default_id)) {
+    $config->delete();
+    echo "Password policy with id " . $default_id . " has been deleted.\n";
+  }
+  $configs = [
+    'password_policy.password_policy.password_policy_sdpa' => 'password_policy',
+  ];
+  module_load_include('inc', 'tide_core', 'includes/helpers');
+  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  foreach ($configs as $config => $type) {
+    $config_read = _tide_read_config($config, $config_location, TRUE);
+    $storage = \Drupal::entityTypeManager()->getStorage($type);
+    $id = substr($config, strrpos($config, '.') + 1);
+    if ($storage->load($id) == NULL) {
+      $config_entity = $storage->createFromStorageRecord($config_read);
+      $config_entity->save();
     }
-    // Import the sdpa password policy.
-    module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
-    _tide_import_single_config('password_policy.password_policy.password_policy_sdpa', $config_location);
   }
 }
 
@@ -89,7 +129,8 @@ function baywatch_update_8003() {
     try {
       \Drupal::messenger()->addMessage("Dropping obsolete table ${table}");
       \Drupal::database()->query(sprintf("DROP TABLE %s;", $table));
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       \Drupal::messenger()->addMessage("Error when dropping table ${table}");
       \Drupal::logger('baywatch')->error($e->getMessage());
     }
@@ -138,10 +179,20 @@ function baywatch_update_8005() {
       $config_entity->save();
     }
     else {
-      $file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
-      $config_values = Yaml::decode(file_get_contents($file));
-      $config = \Drupal::configFactory()->getEditable($config);
-      $config->set('graylist', $config_values['graylist'])->save();
+      $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
+      $inactive_config_values = Yaml::decode(file_get_contents($config_file));
+      $inactive_graylist = $inactive_config_values['graylist'];
+      $active_config = \Drupal::configFactory()->getEditable($config);
+      $active_graylist = $active_config->get('graylist');
+      if ($config == 'config_split.config_split.dev') {
+        if (in_array('clamav.settings', $active_graylist)) {
+          if (($key = array_search('clamav.settings', $active_graylist)) !== FALSE) {
+            unset($active_graylist[$key]);
+          }
+        }
+      }
+      $result = array_unique(array_merge($active_graylist, $inactive_graylist));
+      $active_config->set('graylist', $result)->save();
     }
   }
 }
