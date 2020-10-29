@@ -196,3 +196,29 @@ function baywatch_update_8005() {
     }
   }
 }
+
+/**
+ * Enable Tide OAuth module.
+ */
+function baywatch_update_8006() {
+  $private = 'private://';
+  \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
+
+  $module_installer = \Drupal::service('module_installer');
+  $module_handler = \Drupal::moduleHandler();
+  // Enables required password_policy module.
+  if (!$module_handler->moduleExists('tide_oauth')) {
+    $module_installer->install(['tide_oauth']);
+  }
+
+  $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
+    ->loadByProperties([
+      'label' => 'Editorial Preview',
+      'is_default' => FALSE,
+    ]);
+  if ($consumers) {
+    /** @var \Drupal\consumers\Entity\Consumer $consumer */
+    $consumer = reset($consumers);
+    $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
+  }
+}
