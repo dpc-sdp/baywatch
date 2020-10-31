@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Implements hook_install().
@@ -206,7 +207,7 @@ function baywatch_update_8006() {
 
   $module_installer = \Drupal::service('module_installer');
   $module_handler = \Drupal::moduleHandler();
-  // Enables required password_policy module.
+  // Enables tide_oauth module.
   if (!$module_handler->moduleExists('tide_oauth')) {
     $module_installer->install(['tide_oauth']);
   }
@@ -219,6 +220,7 @@ function baywatch_update_8006() {
   if ($consumers) {
     /** @var \Drupal\consumers\Entity\Consumer $consumer */
     $consumer = reset($consumers);
+    // Set client id to known value for front end.
     $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
   }
 }
