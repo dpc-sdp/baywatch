@@ -30,6 +30,9 @@ function baywatch_install() {
 
   // Change config_split settings.
   baywatch_update_8005();
+
+  // Enable and configure new preview.
+  baywatch_update_8006();
 }
 
 /**
@@ -211,7 +214,10 @@ function baywatch_update_8006() {
   if (!$module_handler->moduleExists('tide_oauth')) {
     $module_installer->install(['tide_oauth']);
   }
-
+  // Enables tide_site_preview.
+  if (!$module_handler->moduleExists('tide_site_preview')) {
+    $module_installer->install(['tide_site_preview']);
+  }
   $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
     ->loadByProperties([
       'label' => 'Editorial Preview',
