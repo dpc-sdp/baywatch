@@ -209,7 +209,7 @@ function baywatch_update_8006() {
 
   $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
     ->loadByProperties([
-      'label' => 'Editorial Preview',
+      'machine_name' => 'editorial_preview',
       'is_default' => FALSE,
     ]);
   if ($consumers) {
