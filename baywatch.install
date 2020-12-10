@@ -205,7 +205,11 @@ function baywatch_update_8006() {
   $private = 'private://';
   \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
-  vicgovau_core_install_module('tide_oauth');
+  // Check if tide_oauth is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('tide_oauth') === FALSE) {
+    // If not, install the tide_oauth module.
+    \Drupal::service('module_installer')->install(['tide_oauth']);
+  }
 
   $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
     ->loadByProperties([
