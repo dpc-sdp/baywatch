@@ -211,6 +211,12 @@ function baywatch_update_8006() {
     \Drupal::service('module_installer')->install(['tide_oauth']);
   }
 
+  // Check if tide_oauth is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('tide_site preview') === FALSE) {
+    // If not, install the tide_oauth module.
+    \Drupal::service('module_installer')->install(['tide_site preview']);
+  }
+
   $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
     ->loadByProperties([
       'machine_name' => 'editorial_preview',
