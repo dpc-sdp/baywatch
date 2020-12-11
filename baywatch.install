@@ -199,7 +199,7 @@ function baywatch_update_8005() {
 }
 
 /**
- * Enable Tide OAuth module.
+ * Enable Tide OAuth & site preview module.
  */
 function baywatch_update_8006() {
   $private = 'private://';
@@ -211,10 +211,10 @@ function baywatch_update_8006() {
     \Drupal::service('module_installer')->install(['tide_oauth']);
   }
 
-  // Check if tide_oauth is both installed and enabled.
-  if (\Drupal::moduleHandler()->moduleExists('tide_site preview') === FALSE) {
-    // If not, install the tide_oauth module.
-    \Drupal::service('module_installer')->install(['tide_site preview']);
+  // Check if tide_site_preview is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('tide_site_preview') === FALSE) {
+    // If not, install the tide_site_preview module.
+    \Drupal::service('module_installer')->install(['tide_site_preview']);
   }
 
   $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
@@ -226,5 +226,16 @@ function baywatch_update_8006() {
     /** @var \Drupal\consumers\Entity\Consumer $consumer */
     $consumer = reset($consumers);
     $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
+  }
+}
+
+/**
+ * Enable Tide share link module.
+ */
+function baywatch_update_8007() {
+  // Check if tide_share_link is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('tide_share_link') === FALSE) {
+    // If not, install the tide_share_link module.
+    \Drupal::service('module_installer')->install(['tide_share_link']);
   }
 }
