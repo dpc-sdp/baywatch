@@ -230,7 +230,7 @@ function baywatch_update_8006() {
 }
 
 /**
- * Enable Tide OAuth & site preview module.
+ * Enable Tide share link module.
  */
 function baywatch_update_8007() {
   // Check if tide_share_link is both installed and enabled.
