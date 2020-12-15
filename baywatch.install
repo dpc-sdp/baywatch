@@ -230,12 +230,53 @@ function baywatch_update_8006() {
 }
 
 /**
- * Enable Tide share link module.
+ * Enable Tide share link module, update shield config & previewer permissions.
  */
 function baywatch_update_8007() {
   // Check if tide_share_link is both installed and enabled.
   if (\Drupal::moduleHandler()->moduleExists('tide_share_link') === FALSE) {
     // If not, install the tide_share_link module.
     \Drupal::service('module_installer')->install(['tide_share_link']);
+  }
+  // Update shield config to exclude oauth path.
+  if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+    $shield_settings = \Drupal::configFactory()->getEditable('shield.settings');
+    $path = "/oauth\r\n/oauth/authorize\r\n/oauth/token";
+    $shield_settings->set('domains', '');
+    $shield_settings->set('method', 0);
+    $shield_settings->set('paths', $path);
+    $shield_settings->save();
+  }
+  // Add new permission to previewer role.
+  $permissions = ['view tide_site preview links'];
+  user_role_grant_permissions('previewer', $permissions);
+}
+
+/**
+ * Revoke previewer permission from all users.
+ */
+function baywatch_update_8008(&$sandbox) {
+  $results = \Drupal::entityQuery('user')
+    ->condition('roles', 'previewer')
+    ->execute();
+  if (!empty($results)) {
+    $users = \Drupal::entityTypeManager()->getStorage('user')
+      ->loadMultiple($results);
+
+    // Remove previewer role in batches.
+    if (!isset($sandbox['total'])) {
+      $sandbox['total'] = count($users);
+      $sandbox['processed'] = 0;
+      $sandbox['#finished'] = 0;
+    }
+    $batch_size = 10;
+    $batch = array_slice($users, 0, $batch_size);
+    foreach ($batch as $user) {
+      $user->removeRole('previewer');
+      $user->save();
+      $sandbox['processed']++;
+    }
+    $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
+    $sandbox['#finished'] = $sandbox['#finished'] > 1 ? 1 : $sandbox['#finished'];
   }
 }
