@@ -7,6 +7,7 @@
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_install().
@@ -230,12 +231,61 @@ function baywatch_update_8006() {
 }
 
 /**
- * Enable Tide share link module.
+ * Enable Tide share link module, update shield config & previewer permissions.
  */
 function baywatch_update_8007() {
   // Check if tide_share_link is both installed and enabled.
   if (\Drupal::moduleHandler()->moduleExists('tide_share_link') === FALSE) {
     // If not, install the tide_share_link module.
     \Drupal::service('module_installer')->install(['tide_share_link']);
+  }
+  // Update shield config to exclude oauth path.
+  if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+    $shield_settings = \Drupal::configFactory()->getEditable('shield.settings');
+    $path = "/oauth\r\n/oauth/authorize\r\n/oauth/token";
+    $shield_settings->set('domains', '');
+    $shield_settings->set('method', 0);
+    $shield_settings->set('paths', $path);
+    $shield_settings->save();
+  }
+  // Add new permission to previewer role.
+  $permissions = ['view tide_site preview links'];
+  user_role_grant_permissions('previewer', $permissions);
+}
+
+/**
+ * Update previewer role.
+ */
+function baywatch_update_8008(&$sandbox) {
+  // Revoke previewer permission from all users.
+  if (!isset($sandbox['total'])) {
+    if ($count = \Drupal::entityQuery('user')
+      ->condition('roles', 'previewer')
+      ->count()
+      ->execute()) {
+      $sandbox['total'] = $count;
+      $sandbox['current'] = 0;
+      $sandbox['#finished'] = $count ? 0 : 1;
+    }
+    else {
+      return;
+    }
+  }
+  $batch = 15;
+  $user_ids = \Drupal::entityQuery('user')
+    ->condition('roles', 'previewer')
+    ->range($sandbox['current'], $batch)
+    ->execute();
+  foreach ($user_ids as $id) {
+    $user = User::load($id);
+    $user->removeRole('previewer');
+    $user->save();
+    $sandbox['current']++;
+  }
+  if ($sandbox['total'] == 0) {
+    $sandbox['#finished'] = 1;
+  }
+  else {
+    $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
   }
 }
