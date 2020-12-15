@@ -254,38 +254,30 @@ function baywatch_update_8007() {
 }
 
 /**
- * Update previewer role.
+ * Revoke previewer permission from all users.
  */
 function baywatch_update_8008(&$sandbox) {
-  // Revoke previewer permission from all users.
-  if (!isset($sandbox['total'])) {
-    if ($count = \Drupal::entityQuery('user')
-      ->condition('roles', 'previewer')
-      ->count()
-      ->execute()) {
-      $sandbox['total'] = $count;
-      $sandbox['current'] = 0;
-      $sandbox['#finished'] = $count ? 0 : 1;
-    }
-    else {
-      return;
-    }
-  }
-  $batch = 15;
-  $user_ids = \Drupal::entityQuery('user')
+  $results = \Drupal::entityQuery('user')
     ->condition('roles', 'previewer')
-    ->range($sandbox['current'], $batch)
     ->execute();
-  foreach ($user_ids as $id) {
-    $user = User::load($id);
-    $user->removeRole('previewer');
-    $user->save();
-    $sandbox['current']++;
-  }
-  if ($sandbox['total'] == 0) {
-    $sandbox['#finished'] = 1;
-  }
-  else {
-    $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
+  if (!empty($results)) {
+    $users = \Drupal::entityTypeManager()->getStorage('user')
+      ->loadMultiple($results);
+
+    // Remove previewer role in batches.
+    if (!isset($sandbox['total'])) {
+      $sandbox['total'] = count($users);
+      $sandbox['processed'] = 0;
+      $sandbox['#finished'] = 0;
+    }
+    $batch_size = 10;
+    $batch = array_slice($users, 0, $batch_size);
+    foreach ($batch as $user) {
+      $user->removeRole('previewer');
+      $user->save();
+      $sandbox['processed']++;
+    }
+    $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
+    $sandbox['#finished'] = $sandbox['#finished'] > 1 ? 1 : $sandbox['#finished'];
   }
 }
