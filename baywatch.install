@@ -248,7 +248,7 @@ function baywatch_update_8007() {
     $shield_settings->save();
   }
   // Add new permission to previewer role.
-  $permissions = ['view tide_site preview links'];
+  $permissions = ['bypass site restriction'];
   user_role_grant_permissions('previewer', $permissions);
 }
 
