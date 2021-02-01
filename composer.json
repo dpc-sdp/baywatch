@@ -8,7 +8,7 @@
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
         "drupal/redis": "^1.0@RC",
-        "drupal/section_purger": "^2.3.0@RC",
+        "drupal/section_purger": "2.3-rc2",
         "drupal/smtp": "^1.0@RC",
         "drupal/queue_mail": "^1",
         "drupal/jwt": "1.0-beta1",
