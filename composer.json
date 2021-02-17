@@ -25,7 +25,7 @@
     "extra": {
         "patches": {
             "drupal/section_purger": {
-                "Construct method does not implement EntityTypeManagerManageInterface - https://www.drupal.org/project/section_purge/issues/3194851#comment-13976987": "https://www.drupal.org/files/issues/2021-01-27/3194851-update-construct.patch"
+                "Construct method does not implement EntityTypeManagerManageInterface - https://www.drupal.org/project/section_purge/issues/3194851#comment-13976987": "https://www.drupal.org/files/issues/2021-01-27/3194851-5-update-construct.patch"
             }
         }
     }
