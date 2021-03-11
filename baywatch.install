@@ -7,6 +7,7 @@
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\views\Views;
 
 /**
  * Implements hook_install().
@@ -278,5 +279,28 @@ function baywatch_update_8008(&$sandbox) {
     }
     $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
     $sandbox['#finished'] = $sandbox['#finished'] > 1 ? 1 : $sandbox['#finished'];
+  }
+}
+
+/**
+ * Fixes broken scheduled_transitions view that may happens in some sites.
+ */
+function baywatch_update_8009() {
+  $view = Views::getView('scheduled_transitions');
+  if ($view == NULL) {
+    $moduleHandler = \Drupal::service('module_handler');
+    if ($moduleHandler->moduleExists('scheduled_transitions')) {
+      $config = \Drupal::configFactory()
+        ->getEditable('views.view.scheduled_transitions');
+      $config->delete();
+      module_load_include('inc', 'tide_core', 'includes/helpers');
+      $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+      $config_read = _tide_read_config('views.view.scheduled_transitions', $config_location, TRUE);
+      $storage = \Drupal::entityTypeManager()->getStorage('view');
+      if ($storage->load('scheduled_transitions') == NULL) {
+        $config_entity = $storage->createFromStorageRecord($config_read);
+        $config_entity->save();
+      }
+    }
   }
 }
