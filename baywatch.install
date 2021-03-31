@@ -30,6 +30,15 @@ function baywatch_install() {
 
   // Change config_split settings.
   baywatch_update_8005();
+
+  // Enable the new preview module.
+  baywatch_update_8006();
+
+  // Enable the new share links module.
+  baywatch_update_8007();
+
+  // Revoke the previewer role.
+  baywatch_update_8008();
 }
 
 /**
