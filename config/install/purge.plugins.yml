@@ -1,5 +1,0 @@
-purgers:
-  -
-    order_index: 2
-    instance_id: acda40a5b3
-    plugin_id: section
