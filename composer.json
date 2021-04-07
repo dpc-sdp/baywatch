@@ -4,10 +4,11 @@
     "type": "drupal-module",
     "license": "GPL-2.0-or-later",
     "require": {
+        "drush/drush": "^10.3",
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
         "drupal/redis": "^1.0@RC",
-        "drupal/section_purger": "0.2.3",
+        "drupal/section_purge": "2.3-rc2",
         "drupal/smtp": "^1.0@RC",
         "drupal/queue_mail": "^1",
         "drupal/jwt": "1.0-beta1",
@@ -17,13 +18,15 @@
         "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        "drupal/section_purger": {
-            "type": "vcs",
-            "no-api": true,
-            "url": "https://github.com/section/section_purger.git"
         }
     },
-    "minimum-stability": "alpha",
-    "prefer-stable": true
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "patches": {
+            "drupal/section_purge": {
+                "Construct method does not implement EntityTypeManagerManageInterface - https://www.drupal.org/project/section_purge/issues/3194851#comment-13976987": "https://www.drupal.org/files/issues/2021-02-17/3194851-6-update-construct.patch"
+            }
+        }
+    }
 }
