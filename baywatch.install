@@ -7,10 +7,6 @@
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\user\Entity\Role;
-use Drupal\taxonomy\Entity\Vocabulary;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
@@ -297,40 +293,5 @@ function baywatch_update_8009() {
   $site_name = $config->get('name');
   if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
     \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
-
-    // Remove permissions on tide_authenticated_content to Approver and Editor.
-    $roles = ['approver', 'editor'];
-    $permissions = [
-      'create terms in authenticated_content',
-      'create terms in authenticated_content',
-    ];
-
-    foreach ($roles as $role_name) {
-      $role = Role::load($role_name);
-      if ($role) {
-        foreach ($permissions as $permission) {
-          $role->revokePermission($permission);
-        }
-        $role->save();
-      }
-    }
-    // Remove the taxonomy and fields that tide_authenticated_content has installed.
-    Vocabulary::load('authenticated_content')->delete();
-    // Delete configs.
-    $field_storage = FieldStorageConfig::loadByName('node', 'field_authenticated_content');
-    if (!empty($field_storage)) {
-      $bundles = $field_storage->getBundles();
-      foreach ($bundles as $bundle) {
-        $field = FieldConfig::loadByName('node', $bundle, 'field_authenticated_content');
-        if (!empty($field)) {
-          $field->delete();
-        }
-      }
-      field_purge_batch(10);
-    }
-    // Delete tide_authenticated_content related rows.
-    \Drupal::database()->delete('node_access')
-      ->condition('realm', 'tide_authenticated_content')
-      ->execute();
   }
 }
