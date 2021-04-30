@@ -37,8 +37,8 @@ function baywatch_install() {
   // Enable the new share links module.
   baywatch_update_8007();
 
-  // Revoke the previewer role.
-  baywatch_update_8008();
+  // Set schema version to 8007 so 8008 runs via updb.
+  drupal_set_installed_schema_version('baywatch', '8007');
 }
 
 /**
