@@ -289,3 +289,10 @@ function baywatch_update_8008(&$sandbox) {
     $sandbox['#finished'] = $sandbox['#finished'] > 1 ? 1 : $sandbox['#finished'];
   }
 }
+
+/**
+ * Uninstall the late runtime processor.
+ */
+function baywatch_update_8009() {
+  \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
+}
