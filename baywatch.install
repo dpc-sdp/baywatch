@@ -30,6 +30,15 @@ function baywatch_install() {
 
   // Change config_split settings.
   baywatch_update_8005();
+
+  // Enable the new preview module.
+  baywatch_update_8006();
+
+  // Enable the new share links module.
+  baywatch_update_8007();
+
+  // Revoke the previewer role.
+  baywatch_update_8008();
 }
 
 /**
@@ -294,4 +303,11 @@ function baywatch_update_8009() {
   if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
     \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
   }
+}
+
+/**
+ * Uninstall the late runtime processor.
+ */
+function baywatch_update_8010() {
+  \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
 }
