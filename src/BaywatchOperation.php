@@ -9,13 +9,11 @@ use Drupal\Core\File\FileSystemInterface;
 class BaywatchOperation
 {
 
-  public function remove_purge_lateruntime()
-  {
+  public function remove_purge_lateruntime() {
     \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
   }
 
-  public function enable_preview()
-  {
+  public function enable_preview() {
     $private = 'private://';
     \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
@@ -43,8 +41,7 @@ class BaywatchOperation
     }
   }
 
-  public function enable_share_links()
-  {
+  public function enable_share_links() {
     // Check if tide_share_link is both installed and enabled.
     if (\Drupal::moduleHandler()->moduleExists('tide_share_link') === FALSE) {
       // If not, install the tide_share_link module.
@@ -64,8 +61,7 @@ class BaywatchOperation
     user_role_grant_permissions('previewer', $permissions);
   }
 
-  public function enable_config_split()
-  {
+  public function enable_config_split() {
     $configs = [
       'config_split.config_split.ci' => 'config_split',
       'config_split.config_split.dev' => 'config_split',
@@ -100,8 +96,7 @@ class BaywatchOperation
     }
   }
 
-  public function enable_queue_mail()
-  {
+  public function enable_queue_mail() {
     // Check if queue_mail is both installed and enabled.
     if (\Drupal::moduleHandler()->moduleExists('queue_mail') === FALSE) {
       // If not, install the queue_mail module.
@@ -113,8 +108,7 @@ class BaywatchOperation
     $config->save();
   }
 
-  public function import_authenticated_content_key()
-  {
+  public function import_authenticated_content_key() {
     $configs = [
       'key.key.authenticated_content' => 'key',
     ];
@@ -132,8 +126,7 @@ class BaywatchOperation
     }
   }
 
-  public function cleanup_tables()
-  {
+  public function cleanup_tables() {
     $tables = [];
     $r = \Drupal::database()->query("SHOW TABLES LIKE 'old_%'");
     $rows = $r->fetchCol();
@@ -154,8 +147,7 @@ class BaywatchOperation
     }
   }
 
-  public function import_sdpa_password_policy()
-  {
+  public function import_sdpa_password_policy() {
     $module_installer = \Drupal::service('module_installer');
     $module_handler = \Drupal::moduleHandler();
     // Enables required password_policy module.
@@ -208,8 +200,7 @@ class BaywatchOperation
     }
   }
 
-  public function remove_previewer_role()
-  {
+  public function remove_previewer_role() {
     $results = \Drupal::entityQuery('user')
       ->condition('roles', 'previewer')
       ->execute();
@@ -224,8 +215,7 @@ class BaywatchOperation
     }
   }
 
-  public function remove_authenticated_content()
-  {
+  public function remove_authenticated_content() {
     $module_handler = \Drupal::moduleHandler();
     $authenticated_module_exist = $module_handler->moduleExists('tide_authenticated_content');
     // Load the site name out of configuration.
