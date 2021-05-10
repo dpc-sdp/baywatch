@@ -6,7 +6,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 
 
-trait BaywatchOperationTrait
+class BaywatchOperation
 {
 
   public function remove_purge_lateruntime()
@@ -221,6 +221,18 @@ trait BaywatchOperationTrait
         $user->removeRole('previewer');
         $user->save();
       }
+    }
+  }
+
+  public function remove_authenticated_content()
+  {
+    $module_handler = \Drupal::moduleHandler();
+    $authenticated_module_exist = $module_handler->moduleExists('tide_authenticated_content');
+    // Load the site name out of configuration.
+    $config = \Drupal::config('system.site');
+    $site_name = $config->get('name');
+    if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
+      \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
     }
   }
 }
