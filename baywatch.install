@@ -7,6 +7,7 @@
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\baywatch\BaywatchOperation;
 
 /**
  * Implements hook_install().
@@ -15,30 +16,17 @@ function baywatch_install() {
   if (\Drupal::service('module_handler')->moduleExists('bay')) {
     \Drupal::service('module_installer')->uninstall('bay');
   }
-
-  // This Will import password policy during first install of the module.
-  baywatch_import_sdpa_password_policy();
-
-  // Ensure queue_mail is configured to handle all mail.
-  baywatch_update_8002();
-
-  // Import key.key.authenticated_content.
-  baywatch_update_8003();
-
-  // Import authenticated_content key.
-  baywatch_update_8004();
-
-  // Change config_split settings.
-  baywatch_update_8005();
-
-  // Enable the new preview module.
-  baywatch_update_8006();
-
-  // Enable the new share links module.
-  baywatch_update_8007();
-
-  // Revoke the previewer role.
-  baywatch_update_8008();
+  $baywatch = new BaywatchOperation();
+  $baywatch->import_sdpa_password_policy();
+  $baywatch->enable_queue_mail();
+  $baywatch->cleanup_tables();
+  $baywatch->import_authenticated_content_key();
+  $baywatch->enable_config_split();
+  $baywatch->enable_preview();
+  $baywatch->enable_share_links();
+  $baywatch->remove_previewer_role();
+  $baywatch->remove_purge_lateruntime();
+  $baywatch->remove_authenticated_content();
 }
 
 /**
