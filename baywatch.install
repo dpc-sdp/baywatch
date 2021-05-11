@@ -7,6 +7,7 @@
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\baywatch\BaywatchOperation;
 
 /**
  * Implements hook_install().
@@ -15,30 +16,17 @@ function baywatch_install() {
   if (\Drupal::service('module_handler')->moduleExists('bay')) {
     \Drupal::service('module_installer')->uninstall('bay');
   }
-
-  // This Will import password policy during first install of the module.
-  baywatch_import_sdpa_password_policy();
-
-  // Ensure queue_mail is configured to handle all mail.
-  baywatch_update_8002();
-
-  // Import key.key.authenticated_content.
-  baywatch_update_8003();
-
-  // Import authenticated_content key.
-  baywatch_update_8004();
-
-  // Change config_split settings.
-  baywatch_update_8005();
-
-  // Enable the new preview module.
-  baywatch_update_8006();
-
-  // Enable the new share links module.
-  baywatch_update_8007();
-
-  // Revoke the previewer role.
-  baywatch_update_8008();
+  $baywatch = new BaywatchOperation();
+  $baywatch->import_sdpa_password_policy();
+  $baywatch->enable_queue_mail();
+  $baywatch->cleanup_tables();
+  $baywatch->import_authenticated_content_key();
+  $baywatch->enable_config_split();
+  $baywatch->enable_preview();
+  $baywatch->enable_share_links();
+  $baywatch->remove_previewer_role();
+  $baywatch->remove_purge_lateruntime();
+  $baywatch->remove_authenticated_content();
 }
 
 /**
@@ -288,4 +276,26 @@ function baywatch_update_8008(&$sandbox) {
     $sandbox['#finished'] = $sandbox['total'] ? $sandbox['processed'] / $sandbox['total'] : 1;
     $sandbox['#finished'] = $sandbox['#finished'] > 1 ? 1 : $sandbox['#finished'];
   }
+}
+
+/**
+ * Uninstall tide_authenticated_content.
+ * Except Vicpol and SSP.
+ */
+function baywatch_update_8009() {
+  $module_handler = \Drupal::moduleHandler();
+  $authenticated_module_exist = $module_handler->moduleExists('tide_authenticated_content');
+  // Load the site name out of configuration.
+  $config = \Drupal::config('system.site');
+  $site_name = $config->get('name');
+  if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
+    \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
+  }
+}
+
+/**
+ * Uninstall the late runtime processor.
+ */
+function baywatch_update_8010() {
+  \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
 }
