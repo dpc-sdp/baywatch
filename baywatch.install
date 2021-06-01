@@ -299,3 +299,15 @@ function baywatch_update_8009() {
 function baywatch_update_8010() {
   \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
 }
+
+/**
+ * Enable tide_edit_protection module.
+ */
+function baywatch_update_8010() {
+  $administrator = Role::load('administrator');
+  $anonymous = Role::load('anonymous');
+  if ($administrator && $anonymous && !\Drupal::moduleHandler()
+      ->moduleExists('tide_edit_protection')) {
+    \Drupal::service('module_installer')->install(['tide_edit_protection']);
+  }
+}
