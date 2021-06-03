@@ -303,7 +303,7 @@ function baywatch_update_8010() {
 /**
  * Enable tide_edit_protection module.
  */
-function baywatch_update_8010() {
+function baywatch_update_8011() {
   $administrator = Role::load('administrator');
   $anonymous = Role::load('anonymous');
   if ($administrator && $anonymous && !\Drupal::moduleHandler()
