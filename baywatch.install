@@ -8,6 +8,7 @@
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
