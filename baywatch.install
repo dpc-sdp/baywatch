@@ -312,3 +312,12 @@ function baywatch_update_8011() {
     \Drupal::service('module_installer')->install(['tide_edit_protection']);
   }
 }
+
+/**
+ * Enable tide_dashboard module.
+ */
+function baywatch_update_8012() {
+  if (!\Drupal::moduleHandler()->moduleExists('tide_dashboard')) {
+    \Drupal::service('module_installer')->install(['tide_dashboard']);
+  }
+}
