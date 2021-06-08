@@ -19,7 +19,7 @@ class BaywatchOperation
    * @throws \Exception
    *   When module already installed.
    */
-  function baywatch_install_module($module) {
+  public function baywatch_install_module($module) {
     /** @var \Drupal\Core\Extension\ModuleHandler $moduleHandler */
     $moduleExists = \Drupal::service('module_handler')->moduleExists($module);
     // Check if module is both installed and enabled.
