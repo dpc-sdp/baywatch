@@ -30,6 +30,7 @@ function baywatch_install() {
   $baywatch->remove_authenticated_content();
   $baywatch->enable_tide_edit_protection();
   $baywatch->enable_tide_dashboard();
+  $baywatch->enable_tide_paragraphs_enhanced_modal();
 }
 
 /**
@@ -312,9 +313,12 @@ function baywatch_update_8011() {
 }
 
 /**
- * Enable tide_dashboard module.
+ * Enable CMS improvement work related module.
  */
 function baywatch_update_8012() {
   $baywatch = new BaywatchOperation();
+  // Enable tide_dashboard module.
   $baywatch->enable_tide_dashboard();
+  // Enable tide_paragraphs_enhanced_modal module.
+  $baywatch->enable_tide_paragraphs_enhanced_modal();
 }

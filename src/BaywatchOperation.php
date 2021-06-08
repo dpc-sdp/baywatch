@@ -234,4 +234,9 @@ class BaywatchOperation
     // Enable tide_dashboard module.
     baywatch_install_module('tide_dashboard');
   }
+
+  public function enable_tide_paragraphs_enhanced_modal() {
+    // Enable tide_paragraphs_enhanced_modal module.
+    baywatch_install_module('tide_paragraphs_enhanced_modal');
+  }
 }
