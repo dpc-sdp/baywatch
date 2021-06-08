@@ -41,10 +41,10 @@ class BaywatchOperation
     \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
     // Install tide_oauth if not installed.
-    baywatch_install_module('tide_oauth');
+    $this->baywatch_install_module('tide_oauth');
 
     // Install tide_site_preview if not installed.
-    baywatch_install_module('tide_site_preview');
+    $this->baywatch_install_module('tide_site_preview');
 
     $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
       ->loadByProperties([
@@ -60,7 +60,7 @@ class BaywatchOperation
 
   public function enable_share_links() {
     // Install tide_share_link if not installed.
-    baywatch_install_module('tide_share_link');
+    $this->baywatch_install_module('tide_share_link');
 
     // Update shield config to exclude oauth path.
     if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
@@ -113,7 +113,7 @@ class BaywatchOperation
 
   public function enable_queue_mail() {
     // Install queue_mail if not installed.
-    baywatch_install_module('queue_mail');
+    $this->baywatch_install_module('queue_mail');
 
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('queue_mail.settings');
@@ -162,15 +162,15 @@ class BaywatchOperation
 
   public function import_sdpa_password_policy() {
     // Enables required password_policy module.
-    baywatch_install_module('password_policy');
+    $this->baywatch_install_module('password_policy');
     // Enables required sub modules.
-    baywatch_install_module('password_policy_character_types');
-    baywatch_install_module('password_policy_characters');
-    baywatch_install_module('password_policy_consecutive');
-    baywatch_install_module('password_policy_history');
-    baywatch_install_module('password_policy_length');
-    baywatch_install_module('password_policy_username');
-    baywatch_install_module('password_strength');
+    $this->baywatch_install_module('password_policy_character_types');
+    $this->baywatch_install_module('password_policy_characters');
+    $this->baywatch_install_module('password_policy_consecutive');
+    $this->baywatch_install_module('password_policy_history');
+    $this->baywatch_install_module('password_policy_length');
+    $this->baywatch_install_module('password_policy_username');
+    $this->baywatch_install_module('password_strength');
     // Remove default password policy if exists.
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('password_policy.password_policy.default');
@@ -226,17 +226,17 @@ class BaywatchOperation
     $anonymous = Role::load('anonymous');
     if ($administrator && $anonymous) {
       // Enable tide_edit_protection module.
-      baywatch_install_module('tide_edit_protection');
+      $this->baywatch_install_module('tide_edit_protection');
     }
   }
 
   public function enable_tide_dashboard() {
     // Enable tide_dashboard module.
-    baywatch_install_module('tide_dashboard');
+    $this->baywatch_install_module('tide_dashboard');
   }
 
   public function enable_tide_paragraphs_enhanced_modal() {
     // Enable tide_paragraphs_enhanced_modal module.
-    baywatch_install_module('tide_paragraphs_enhanced_modal');
+    $this->baywatch_install_module('tide_paragraphs_enhanced_modal');
   }
 }
