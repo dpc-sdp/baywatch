@@ -27,9 +27,6 @@ class BaywatchOperation
       // If not, install the queue_mail module.
       \Drupal::service('module_installer')->install([$module]);
     }
-    if ($moduleExists) {
-      throw new \Exception(sprintf('Unable to install module %s', $module));
-    }
   }
 
   public function remove_purge_lateruntime() {
