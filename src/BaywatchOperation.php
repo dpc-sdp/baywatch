@@ -4,10 +4,33 @@ namespace Drupal\baywatch;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\user\Entity\Role;
 
 
 class BaywatchOperation
 {
+
+  /**
+   * Helper to install a module.
+   *
+   * @param string $module
+   *   Module name.
+   *
+   * @throws \Exception
+   *   When module already installed.
+   */
+  function baywatch_install_module($module) {
+    /** @var \Drupal\Core\Extension\ModuleHandler $moduleHandler */
+    $moduleExists = \Drupal::service('module_handler')->moduleExists($module);
+    // Check if module is both installed and enabled.
+    if (!$moduleExists) {
+      // If not, install the queue_mail module.
+      \Drupal::service('module_installer')->install([$module]);
+    }
+    if ($moduleExists) {
+      throw new \Exception(sprintf('Unable to install module %s', $module));
+    }
+  }
 
   public function remove_purge_lateruntime() {
     \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
@@ -17,17 +40,11 @@ class BaywatchOperation
     $private = 'private://';
     \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
-    // Check if tide_oauth is both installed and enabled.
-    if (\Drupal::moduleHandler()->moduleExists('tide_oauth') === FALSE) {
-      // If not, install the tide_oauth module.
-      \Drupal::service('module_installer')->install(['tide_oauth']);
-    }
+    // Install tide_oauth if not installed.
+    baywatch_install_module('tide_oauth');
 
-    // Check if tide_site_preview is both installed and enabled.
-    if (\Drupal::moduleHandler()->moduleExists('tide_site_preview') === FALSE) {
-      // If not, install the tide_site_preview module.
-      \Drupal::service('module_installer')->install(['tide_site_preview']);
-    }
+    // Install tide_site_preview if not installed.
+    baywatch_install_module('tide_site_preview');
 
     $consumers = \Drupal::entityTypeManager()->getStorage('consumer')
       ->loadByProperties([
@@ -42,11 +59,9 @@ class BaywatchOperation
   }
 
   public function enable_share_links() {
-    // Check if tide_share_link is both installed and enabled.
-    if (\Drupal::moduleHandler()->moduleExists('tide_share_link') === FALSE) {
-      // If not, install the tide_share_link module.
-      \Drupal::service('module_installer')->install(['tide_share_link']);
-    }
+    // Install tide_share_link if not installed.
+    baywatch_install_module('tide_share_link');
+
     // Update shield config to exclude oauth path.
     if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
       $shield_settings = \Drupal::configFactory()->getEditable('shield.settings');
@@ -97,11 +112,9 @@ class BaywatchOperation
   }
 
   public function enable_queue_mail() {
-    // Check if queue_mail is both installed and enabled.
-    if (\Drupal::moduleHandler()->moduleExists('queue_mail') === FALSE) {
-      // If not, install the queue_mail module.
-      \Drupal::service('module_installer')->install(['queue_mail']);
-    }
+    // Install queue_mail if not installed.
+    baywatch_install_module('queue_mail');
+
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('queue_mail.settings');
     $config->set('queue_mail_keys', '*');
@@ -148,34 +161,16 @@ class BaywatchOperation
   }
 
   public function import_sdpa_password_policy() {
-    $module_installer = \Drupal::service('module_installer');
-    $module_handler = \Drupal::moduleHandler();
     // Enables required password_policy module.
-    if (!$module_handler->moduleExists('password_policy')) {
-      $module_installer->install(['password_policy']);
-    }
+    baywatch_install_module('password_policy');
     // Enables required sub modules.
-    if (!$module_handler->moduleExists('password_policy_character_types')) {
-      $module_installer->install(['password_policy_character_types']);
-    }
-    if (!$module_handler->moduleExists('password_policy_characters')) {
-      $module_installer->install(['password_policy_characters']);
-    }
-    if (!$module_handler->moduleExists('password_policy_consecutive')) {
-      $module_installer->install(['password_policy_consecutive']);
-    }
-    if (!$module_handler->moduleExists('password_policy_history')) {
-      $module_installer->install(['password_policy_history']);
-    }
-    if (!$module_handler->moduleExists('password_policy_length')) {
-      $module_installer->install(['password_policy_length']);
-    }
-    if (!$module_handler->moduleExists('password_policy_username')) {
-      $module_installer->install(['password_policy_username']);
-    }
-    if (!$module_handler->moduleExists('password_strength')) {
-      $module_installer->install(['password_strength']);
-    }
+    baywatch_install_module('password_policy_character_types');
+    baywatch_install_module('password_policy_characters');
+    baywatch_install_module('password_policy_consecutive');
+    baywatch_install_module('password_policy_history');
+    baywatch_install_module('password_policy_length');
+    baywatch_install_module('password_policy_username');
+    baywatch_install_module('password_strength');
     // Remove default password policy if exists.
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('password_policy.password_policy.default');
@@ -224,5 +219,24 @@ class BaywatchOperation
     if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
       \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
     }
+  }
+
+  public function enable_tide_edit_protection() {
+    $administrator = Role::load('administrator');
+    $anonymous = Role::load('anonymous');
+    if ($administrator && $anonymous) {
+      // Enable tide_edit_protection module.
+      baywatch_install_module('tide_edit_protection');
+    }
+  }
+
+  public function enable_tide_dashboard() {
+    // Enable tide_dashboard module.
+    baywatch_install_module('tide_dashboard');
+  }
+
+  public function enable_tide_paragraphs_enhanced_modal() {
+    // Enable tide_paragraphs_enhanced_modal module.
+    baywatch_install_module('tide_paragraphs_enhanced_modal');
   }
 }
