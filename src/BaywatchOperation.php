@@ -213,7 +213,7 @@ class BaywatchOperation
     // Load the site name out of configuration.
     $config = \Drupal::config('system.site');
     $site_name = $config->get('name');
-    if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
+    if ($site_name !== 'Victoria Police' && $site_name !== 'Shared Service Provider Content Repository' && $authenticated_module_exist) {
       \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
     }
   }
