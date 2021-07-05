@@ -8,6 +8,7 @@
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
@@ -27,6 +28,9 @@ function baywatch_install() {
   $baywatch->remove_previewer_role();
   $baywatch->remove_purge_lateruntime();
   $baywatch->remove_authenticated_content();
+  $baywatch->enable_tide_edit_protection();
+  $baywatch->enable_tide_dashboard();
+  $baywatch->enable_tide_paragraphs_enhanced_modal();
 }
 
 /**
@@ -283,14 +287,8 @@ function baywatch_update_8008(&$sandbox) {
  * Except Vicpol and SSP.
  */
 function baywatch_update_8009() {
-  $module_handler = \Drupal::moduleHandler();
-  $authenticated_module_exist = $module_handler->moduleExists('tide_authenticated_content');
-  // Load the site name out of configuration.
-  $config = \Drupal::config('system.site');
-  $site_name = $config->get('name');
-  if (($site_name !== 'Victoria Police' || $site_name !== 'Shared Service Provider Content Repository') && $authenticated_module_exist) {
-    \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
-  }
+  $baywatch = new BaywatchOperation();
+  $baywatch->remove_authenticated_content();
 }
 
 /**
@@ -303,11 +301,18 @@ function baywatch_update_8010() {
 /**
  * Enable tide_edit_protection module.
  */
-function baywatch_update_8010() {
-  $administrator = Role::load('administrator');
-  $anonymous = Role::load('anonymous');
-  if ($administrator && $anonymous && !\Drupal::moduleHandler()
-      ->moduleExists('tide_edit_protection')) {
-    \Drupal::service('module_installer')->install(['tide_edit_protection']);
-  }
+function baywatch_update_8011() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_edit_protection();
+}
+
+/**
+ * Enable CMS improvement work related module.
+ */
+function baywatch_update_8012() {
+  $baywatch = new BaywatchOperation();
+  // Enable tide_dashboard module.
+  $baywatch->enable_tide_dashboard();
+  // Enable tide_paragraphs_enhanced_modal module.
+  $baywatch->enable_tide_paragraphs_enhanced_modal();
 }
