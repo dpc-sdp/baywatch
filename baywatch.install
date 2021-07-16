@@ -316,3 +316,11 @@ function baywatch_update_8012() {
   // Enable tide_paragraphs_enhanced_modal module.
   $baywatch->enable_tide_paragraphs_enhanced_modal();
 }
+
+/**
+ * Enable tide_ui_restriction module.
+ */
+function baywatch_update_8013() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_ui_restriction();
+}
