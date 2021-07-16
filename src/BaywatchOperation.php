@@ -236,4 +236,9 @@ class BaywatchOperation
     // Enable tide_paragraphs_enhanced_modal module.
     $this->baywatch_install_module('tide_paragraphs_enhanced_modal');
   }
+
+  public function enable_tide_ui_restriction() {
+    // Enable tide_ui_restriction module.
+    $this->baywatch_install_module('tide_ui_restriction');
+  }
 }
