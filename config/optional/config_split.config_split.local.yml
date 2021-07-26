@@ -16,7 +16,6 @@ blacklist: {  }
 graylist:
   - clamav.settings
   - config_devel.settings
-  - elasticsearch_connector.cluster.elasticsearch_bay
   - simple_sitemap.settings
   - tide_media.settings
   - views.settings

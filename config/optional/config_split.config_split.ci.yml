@@ -10,7 +10,6 @@ theme: {  }
 blacklist: {  }
 graylist:
   - clamav.settings
-  - elasticsearch_connector.cluster.elasticsearch_bay
   - simple_sitemap.settings
   - tide_media.settings
 graylist_dependents: true
