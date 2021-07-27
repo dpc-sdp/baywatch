@@ -241,4 +241,12 @@ class BaywatchOperation
     // Enable tide_ui_restriction module.
     $this->baywatch_install_module('tide_ui_restriction');
   }
+
+  public function set_default_timezone() {
+    // Change timezone to Australia/Melbourne.
+    \Drupal::configFactory()
+    ->getEditable('system.date')
+    ->set('timezone.default', 'Australia/Melbourne')
+    ->save(TRUE);
+  }
 }
