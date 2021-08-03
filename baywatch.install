@@ -32,6 +32,7 @@ function baywatch_install() {
   $baywatch->enable_tide_dashboard();
   $baywatch->enable_tide_paragraphs_enhanced_modal();
   $baywatch->set_default_timezone();
+  $baywatch->add_purge_configurations();
 }
 
 /**

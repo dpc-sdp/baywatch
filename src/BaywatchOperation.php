@@ -249,4 +249,27 @@ class BaywatchOperation
     ->set('timezone.default', 'Australia/Melbourne')
     ->save(TRUE);
   }
+
+  public function add_purge_configurations() {
+    $configs = [
+      'purge.plugins' => 'purgers/processors',
+      'purge.logger_channels' => 'channels',
+    ];
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    // Check if field already exported to config/sync.
+    foreach ($configs as $config => $key) {
+      $config_read = _tide_read_config($config, $config_location, TRUE);
+      $active_config = \Drupal::configFactory()->getEditable($config);
+      if (preg_match('/\b\/\b/', $key)) {
+        [$key_1, $key_2] = explode('/', $key);
+        $active_config->set($key_1, $config_read[$key_1]);
+        $active_config->set($key_2, $config_read[$key_2]);
+        $active_config->save();
+        continue;
+      }
+      $active_config->set($key, $config_read[$key]);
+      $active_config->save();
+    }
+  }
 }
