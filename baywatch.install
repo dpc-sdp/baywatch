@@ -331,26 +331,20 @@ function baywatch_update_8013() {
 function baywatch_update_8014() {
     // config_split files
     $configs = [
-        'config_split.config_split.ci' => 'config_split',
-        'config_split.config_split.dev' => 'config_split',
-        'config_split.config_split.local' => 'config_split',
+        'config_split.config_split.ci',
+        'config_split.config_split.dev',
+        'config_split.config_split.local',
     ];
     /*
      * IF elasticsearch_connector.cluster.elasticsearch_bay in greylist
      * THEN remove it from the list
      */
-    foreach ($configs as $config => $type) {
-        $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
-        $inactive_config_values = Yaml::decode(file_get_contents($config_file));
-        $inactive_graylist = $inactive_config_values['graylist'];
+    foreach ($configs as $config) {
         $active_config = \Drupal::configFactory()->getEditable($config);
-        $active_graylist = $active_config->get('graylist');
-        if (in_array('elasticsearch_connector.cluster.elasticsearch_bay', $active_graylist)) {
-            if (($key = array_search('elasticsearch_connector.cluster.elasticsearch_bay', $active_graylist)) !== FALSE) {
-                unset($active_graylist[$key]);
-            }
+        $es_connector = 'elasticsearch_connector.cluster.elasticsearch_bay';
+        if (in_array($es_connector, $active_graylist) && ($key = array_search($es_connector, $active_graylist)) !== false) {
+            unset($active_graylist[$key]);
         }
-        $result = array_unique(array_merge($active_graylist, $inactive_graylist));
-        $active_config->set('graylist', $result)->save();
+        $active_config->set('graylist', $active_graylist)->save();
     }
 }
