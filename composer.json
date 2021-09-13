@@ -7,19 +7,11 @@
         "drush/drush": "^10.3",
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
-        "drupal/section_purger": "dev-updates_to_compatible_with_drupal_9",
         "drupal/redis": "^1.0",
         "drupal/smtp": "^1.0@RC",
         "drupal/queue_mail": "^1",
         "drupal/jwt": "^1.0",
         "drupal/config_split": "^1.4"
-    },
-    "repositories": {
-        "drupal/section_purger": {
-            "type": "vcs",
-            "no-api": true,
-            "url": "https://git.drupalcode.org/issue/section_purge-3227034.git"
-        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
