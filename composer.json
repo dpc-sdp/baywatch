@@ -7,6 +7,7 @@
         "drush/drush": "^10.3",
         "drupal/purge": "^3.0@beta",
         "drupal/purge_queuer_url": "^1.0@RC",
+        "drupal/section_purge": "dev-updates_to_compatible_with_drupal_9",
         "drupal/redis": "^1.0",
         "drupal/smtp": "^1.0@RC",
         "drupal/queue_mail": "^1",
