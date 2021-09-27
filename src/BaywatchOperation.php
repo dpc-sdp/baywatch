@@ -241,4 +241,20 @@ class BaywatchOperation
     // Enable tide_ui_restriction module.
     $this->baywatch_install_module('tide_ui_restriction');
   }
+
+  public function import_default_section_config() {
+    $configs = [
+      'key.key.section_io_password',
+      'purge.logger_channels',
+      'purge.plugins',
+      'purge_queuer_coretags.settings',
+      'section_purger.settings',
+    ];
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    foreach($configs as $config) {
+      \Drupal::configFactory()->getEditable($config)->delete();
+      _tide_import_single_config($config, $config_location);
+    }
+  }
 }

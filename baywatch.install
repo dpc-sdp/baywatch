@@ -31,6 +31,7 @@ function baywatch_install() {
   $baywatch->enable_tide_edit_protection();
   $baywatch->enable_tide_dashboard();
   $baywatch->enable_tide_paragraphs_enhanced_modal();
+  $baywatch->import_default_section_config();
 }
 
 /**
