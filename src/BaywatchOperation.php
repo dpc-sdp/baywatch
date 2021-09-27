@@ -248,7 +248,7 @@ class BaywatchOperation
       'purge.logger_channels',
       'purge.plugins',
       'purge_queuer_coretags.settings',
-      'section_purger.settings',
+      'section_purger.settings.8714ff77fc',
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
     $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
