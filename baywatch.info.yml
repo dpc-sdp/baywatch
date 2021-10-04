@@ -18,6 +18,7 @@ dependencies:
   - password_strength:password_strength
   - queue_mail:queue_mail
   - redis:redis
+  - section_purger:section_purger
   - smtp:smtp
   - config_split:config_split
   - jwt:jwt
