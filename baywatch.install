@@ -32,6 +32,7 @@ function baywatch_install() {
   $baywatch->enable_tide_dashboard();
   $baywatch->enable_tide_paragraphs_enhanced_modal();
   $baywatch->set_default_timezone();
+  $baywatch->exclude_files_path();
 }
 
 /**
@@ -324,4 +325,11 @@ function baywatch_update_8012() {
 function baywatch_update_8013() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_ui_restriction();
+}
+
+/**
+ * Excludes files path in shield setting.
+ */
+function baywatch_update_8014() {
+  $baywatch->exclude_files_path();
 }
