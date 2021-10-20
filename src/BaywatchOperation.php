@@ -242,6 +242,24 @@ class BaywatchOperation
     $this->baywatch_install_module('tide_ui_restriction');
   }
 
+  public function set_default_timezone() {
+    // Change timezone to Australia/Melbourne.
+    \Drupal::configFactory()
+    ->getEditable('system.date')
+    ->set('timezone.default', 'Australia/Melbourne')
+    ->save(TRUE);
+  }
+
+  public function exclude_files_path(){
+    if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+      $shield = \Drupal::configFactory()->getEditable('shield.settings');
+      $paths = $shield->get('paths');
+      $paths .= "\r\n/sites/default/files";
+      $shield->set('paths',$paths);
+      $shield->save();
+    }
+  }
+
   public function import_default_section_config() {
     $configs = [
       'key.key.section_io_password',

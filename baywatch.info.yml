@@ -2,8 +2,9 @@ name: baywatch
 description: 'Configuration for integration with Bay hosting platform'
 type: module
 package: Other
-core: 8.x
+core_version_requirement: ^8.9 || ^9
 dependencies:
+  - shield:shield
   - purge:purge
   - purge:purge_processor_cron
   - purge:purge_queuer_coretags
@@ -18,7 +19,7 @@ dependencies:
   - password_strength:password_strength
   - queue_mail:queue_mail
   - redis:redis
-  - section_purger
+  - section_purger:section_purger
   - smtp:smtp
   - config_split:config_split
   - jwt:jwt
