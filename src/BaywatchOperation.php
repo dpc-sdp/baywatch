@@ -249,4 +249,14 @@ class BaywatchOperation
     ->set('timezone.default', 'Australia/Melbourne')
     ->save(TRUE);
   }
+
+  public function exclude_files_path(){
+    if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+      $shield = \Drupal::configFactory()->getEditable('shield.settings');
+      $paths = $shield->get('paths');
+      $paths .= "\r\n/sites/default/files";
+      $shield->set('paths',$paths);
+      $shield->save();
+    }
+  }
 }
