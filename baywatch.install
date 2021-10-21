@@ -332,5 +332,6 @@ function baywatch_update_8013() {
  * Excludes files path in shield setting.
  */
 function baywatch_update_8014() {
+  $baywatch = new BaywatchOperation();
   $baywatch->exclude_files_path();
 }
