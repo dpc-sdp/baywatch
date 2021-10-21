@@ -250,7 +250,7 @@ class BaywatchOperation
     ->save(TRUE);
   }
 
-  public function exclude_files_path(){
+  public function exclude_files_path() {
     if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
       $shield = \Drupal::configFactory()->getEditable('shield.settings');
       $paths = $shield->get('paths');
