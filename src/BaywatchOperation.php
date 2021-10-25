@@ -275,4 +275,21 @@ class BaywatchOperation
       _tide_import_single_config($config, $config_location);
     }
   }
+
+  public function enable_tide_block_inactive_users() {
+    $this->baywatch_install_module('tide_block_inactive_users');
+    if (\Drupal::moduleHandler()->moduleExists('queue_mail') === TRUE) {
+      $config_factory = \Drupal::configFactory();
+      $config = $config_factory->getEditable('queue_mail.settings');
+      $value = $config->get('queue_mail_keys');
+      if ($value && $value !== '*') {
+        $config->set('queue_mail_keys', $value . "\r\ntide_block_inactive_users_*");
+      }
+      if (!$value) {
+        $config->set('queue_mail_keys', $value . "tide_block_inactive_users_*");
+      }
+      $config->save();
+    }
+  }
+
 }
