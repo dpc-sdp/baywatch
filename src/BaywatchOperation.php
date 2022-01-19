@@ -292,4 +292,14 @@ class BaywatchOperation
     }
   }
 
+  public function remove_permissions_by_term() {
+    $module_handler = \Drupal::moduleHandler();
+    $authenticated_module_exist = $module_handler->moduleExists('permissions_by_term');
+    $config = \Drupal::config('system.site');
+    $site_name = $config->get('name');
+    if ($site_name !== 'Victoria Police' && $site_name !== 'Shared Service Provider Content Repository' && $authenticated_module_exist) {
+      \Drupal::service('module_installer')->uninstall(['permissions_by_term']);
+    }
+  }
+
 }
