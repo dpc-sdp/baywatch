@@ -344,3 +344,12 @@ function baywatch_update_8015() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_block_inactive_users();
 }
+
+/**
+ * Uninstall permissions_by_term.
+ * Except Vicpol and SSP.
+ */
+function baywatch_update_8016() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->remove_permissions_by_term();
+}
