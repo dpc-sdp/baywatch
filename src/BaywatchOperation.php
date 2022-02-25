@@ -302,4 +302,9 @@ class BaywatchOperation
     }
   }
 
+  public function enable_tide_spell_checker() {
+    // Enable tide_spell_checker module.
+    $this->baywatch_install_module('tide_spell_checker');
+  }
+
 }
