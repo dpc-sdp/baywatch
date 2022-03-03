@@ -35,6 +35,7 @@ function baywatch_install() {
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
+  $baywatch->enable_tide_spell_checker();
 }
 
 /**
@@ -352,4 +353,12 @@ function baywatch_update_8015() {
 function baywatch_update_8016() {
   $baywatch = new BaywatchOperation();
   $baywatch->remove_permissions_by_term();
+}
+
+/**
+ * Enables tide_spell_checker module.
+ */
+function baywatch_update_8017() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_spell_checker();
 }
