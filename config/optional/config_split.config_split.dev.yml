@@ -11,7 +11,6 @@ theme: {  }
 blacklist: {  }
 graylist:
   - config_ignore.settings
-  - elasticsearch_connector.cluster.elasticsearch_bay
   - simple_sitemap.settings
   - key.key.authenticated_content
 graylist_dependents: true
