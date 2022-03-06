@@ -35,6 +35,7 @@ function baywatch_install() {
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
+  $baywatch->enable_tide_spell_checker();
 }
 
 /**
@@ -355,9 +356,17 @@ function baywatch_update_8016() {
 }
 
 /**
- * Remove Elasticsearch Connector configuration from config_split
+ * Enables tide_spell_checker module.
  */
 function baywatch_update_8017() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_spell_checker();
+}
+
+/**
+ * Remove Elasticsearch Connector configuration from config_split
+ */
+function baywatch_update_8018() {
   // config_split files
   $configs = [
       'config_split.config_split.ci',
