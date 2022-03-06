@@ -241,4 +241,65 @@ class BaywatchOperation
     // Enable tide_ui_restriction module.
     $this->baywatch_install_module('tide_ui_restriction');
   }
+
+  public function set_default_timezone() {
+    // Change timezone to Australia/Melbourne.
+    \Drupal::configFactory()
+    ->getEditable('system.date')
+    ->set('timezone.default', 'Australia/Melbourne')
+    ->save(TRUE);
+  }
+
+  public function exclude_files_path() {
+    if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+      $shield = \Drupal::configFactory()->getEditable('shield.settings');
+      $paths = $shield->get('paths');
+      $paths .= "\r\n/sites/default/files";
+      $shield->set('paths',$paths);
+      $shield->save();
+    }
+  }
+
+  public function import_default_section_config() {
+    $configs = [
+      'key.key.section_io_password',
+      'purge.logger_channels',
+      'purge.plugins',
+      'purge_queuer_coretags.settings',
+      'section_purger.settings.8714ff77fc',
+    ];
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    foreach($configs as $config) {
+      \Drupal::configFactory()->getEditable($config)->delete();
+      _tide_import_single_config($config, $config_location);
+    }
+  }
+
+  public function enable_tide_block_inactive_users() {
+    $this->baywatch_install_module('tide_block_inactive_users');
+    if (\Drupal::moduleHandler()->moduleExists('queue_mail') === TRUE) {
+      $config_factory = \Drupal::configFactory();
+      $config = $config_factory->getEditable('queue_mail.settings');
+      $value = $config->get('queue_mail_keys');
+      if ($value && $value !== '*') {
+        $config->set('queue_mail_keys', $value . "\r\ntide_block_inactive_users_*");
+      }
+      if (!$value) {
+        $config->set('queue_mail_keys', $value . "tide_block_inactive_users_*");
+      }
+      $config->save();
+    }
+  }
+
+  public function remove_permissions_by_term() {
+    $module_handler = \Drupal::moduleHandler();
+    $authenticated_module_exist = $module_handler->moduleExists('permissions_by_term');
+    $config = \Drupal::config('system.site');
+    $site_name = $config->get('name');
+    if ($site_name !== 'Victoria Police' && $site_name !== 'Shared Service Provider Content Repository' && $authenticated_module_exist) {
+      \Drupal::service('module_installer')->uninstall(['permissions_by_term']);
+    }
+  }
+
 }

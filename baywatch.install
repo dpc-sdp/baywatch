@@ -31,6 +31,10 @@ function baywatch_install() {
   $baywatch->enable_tide_edit_protection();
   $baywatch->enable_tide_dashboard();
   $baywatch->enable_tide_paragraphs_enhanced_modal();
+  $baywatch->set_default_timezone();
+  $baywatch->exclude_files_path();
+  $baywatch->import_default_section_config();
+  $baywatch->enable_tide_block_inactive_users();
 }
 
 /**
@@ -326,25 +330,50 @@ function baywatch_update_8013() {
 }
 
 /**
- * Remove Elasticsearch Connector configuration from config_split
+ * Excludes files path in shield setting.
  */
 function baywatch_update_8014() {
-    // config_split files
-    $configs = [
-        'config_split.config_split.ci',
-        'config_split.config_split.dev',
-        'config_split.config_split.local',
-    ];
-    /*
-     * IF elasticsearch_connector.cluster.elasticsearch_bay in greylist
-     * THEN remove it from the list
-     */
-    foreach ($configs as $config) {
-        $active_config = \Drupal::configFactory()->getEditable($config);
-        $es_connector = 'elasticsearch_connector.cluster.elasticsearch_bay';
-        if (in_array($es_connector, $active_graylist) && ($key = array_search($es_connector, $active_graylist)) !== false) {
-            unset($active_graylist[$key]);
-        }
-        $active_config->set('graylist', $active_graylist)->save();
-    }
+  $baywatch = new BaywatchOperation();
+  $baywatch->exclude_files_path();
+}
+
+/**
+ * Enables tide_block_inactive_users module.
+ */
+function baywatch_update_8015() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_block_inactive_users();
+}
+
+/**
+ * Uninstall permissions_by_term.
+ * Except Vicpol and SSP.
+ */
+function baywatch_update_8016() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->remove_permissions_by_term();
+}
+
+/**
+ * Remove Elasticsearch Connector configuration from config_split
+ */
+function baywatch_update_8017() {
+  // config_split files
+  $configs = [
+      'config_split.config_split.ci',
+      'config_split.config_split.dev',
+      'config_split.config_split.local',
+  ];
+  /*
+   * IF elasticsearch_connector.cluster.elasticsearch_bay in greylist
+   * THEN remove it from the list
+   */
+  foreach ($configs as $config) {
+      $active_config = \Drupal::configFactory()->getEditable($config);
+      $es_connector = 'elasticsearch_connector.cluster.elasticsearch_bay';
+      if (in_array($es_connector, $active_graylist) && ($key = array_search($es_connector, $active_graylist)) !== false) {
+          unset($active_graylist[$key]);
+      }
+      $active_config->set('graylist', $active_graylist)->save();
+  }
 }
