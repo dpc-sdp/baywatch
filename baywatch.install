@@ -369,20 +369,23 @@ function baywatch_update_8017() {
 function baywatch_update_8018() {
   // config_split files
   $configs = [
-      'config_split.config_split.ci',
-      'config_split.config_split.dev',
-      'config_split.config_split.local',
+    'config_split.config_split.ci',
+    'config_split.config_split.dev',
+    'config_split.config_split.local',
   ];
   /*
    * IF elasticsearch_connector.cluster.elasticsearch_bay in greylist
    * THEN remove it from the list
    */
   foreach ($configs as $config) {
-      $active_config = \Drupal::configFactory()->getEditable($config);
-      $es_connector = 'elasticsearch_connector.cluster.elasticsearch_bay';
-      if (in_array($es_connector, $active_graylist) && ($key = array_search($es_connector, $active_graylist)) !== false) {
-          unset($active_graylist[$key]);
+    $active_config = \Drupal::configFactory()->getEditable($config);
+    $es_connector = 'elasticsearch_connector.cluster.elasticsearch_bay';
+    $active_graylist = $active_config->get('graylist');
+    if (!empty($active_graylist)) {
+      if (in_array($es_connector, $active_graylist) && ($key = array_search($es_connector, $active_graylist)) !== FALSE) {
+        unset($active_graylist[$key]);
       }
       $active_config->set('graylist', $active_graylist)->save();
+    }
   }
 }
