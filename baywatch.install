@@ -395,8 +395,6 @@ function baywatch_update_8018() {
  */
 function baywatch_update_8020() {
   if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
-    $baywatch = new BaywatchOperation();
-    $baywatch->exclude_files_path();
     $shield = \Drupal::configFactory()->getEditable('shield.settings');
     $paths = $shield->get('paths');
     $new_paths = str_replace("/sites/default/files", "/sites/default/files/*", $paths);
