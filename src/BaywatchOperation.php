@@ -254,7 +254,7 @@ class BaywatchOperation
     if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
       $shield = \Drupal::configFactory()->getEditable('shield.settings');
       $paths = $shield->get('paths');
-      $paths .= "\r\n/sites/default/files";
+      $paths .= "\r\n/sites/default/files/*";
       $shield->set('paths',$paths);
       $shield->save();
     }
