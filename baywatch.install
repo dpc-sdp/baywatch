@@ -389,3 +389,11 @@ function baywatch_update_8018() {
     }
   }
 }
+
+/**
+ * Excludes files path in shield setting.
+ */
+function baywatch_update_8019() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->exclude_files_path();
+}
