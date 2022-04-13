@@ -36,6 +36,7 @@ function baywatch_install() {
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
   $baywatch->enable_tide_spell_checker();
+  $baywatch->import_default_csp_config();
 }
 
 /**
@@ -387,5 +388,18 @@ function baywatch_update_8018() {
       }
       $active_config->set('graylist', $active_graylist)->save();
     }
+  }
+}
+
+/**
+ * Check if csp enabled or not.
+ */
+function baywatch_update_8019() {
+  $seckit_config = Drupal::configFactory()->getEditable('seckit.settings');
+  $condition_1 = $seckit_config->get('seckit_xss.csp.checkbox');
+  $condition_2 = $seckit_config->get('seckit_xss.csp.script-src');
+  $condition_3 = $seckit_config->get('seckit_xss.csp.connect-src');
+  if (empty($condition_1) || empty($condition_2) || empty($condition_3)) {
+    throw new \RuntimeException('seckit.settings has incorrect settings.');
   }
 }

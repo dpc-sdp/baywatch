@@ -307,4 +307,12 @@ class BaywatchOperation
     $this->baywatch_install_module('tide_spell_checker');
   }
 
+  public function import_default_csp_config() {
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $read = _tide_read_config('seckit.settings', $config_location, FALSE);
+    $config_storage = \Drupal::service('config.storage');
+    $config_storage->write('seckit.settings', $read);
+  }
+
 }
