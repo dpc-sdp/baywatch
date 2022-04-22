@@ -389,3 +389,19 @@ function baywatch_update_8018() {
     }
   }
 }
+
+/**
+ * Corrects excluded files path in shield setting.
+ */
+function baywatch_update_8020() {
+  if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+    $shield = \Drupal::configFactory()->getEditable('shield.settings');
+    $paths = $shield->get('paths');
+    $path_search = "/sites/default/files";
+    if (strpos($paths, $path_search) !== FALSE) {
+      $new_paths = str_replace($path_search, "/sites/default/files/*", $paths);
+      $shield->set('paths',$new_paths);
+      $shield->save();
+    }
+  }
+}
