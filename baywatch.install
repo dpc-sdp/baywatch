@@ -36,6 +36,7 @@ function baywatch_install() {
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
   $baywatch->enable_tide_spell_checker();
+  $baywatch->enable_tide_auto_logout();
 }
 
 /**
@@ -404,4 +405,12 @@ function baywatch_update_8020() {
       $shield->save();
     }
   }
+}
+
+/**
+ * Enables tide_auto_logout module.
+ */
+function baywatch_update_8021() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_auto_logout();
 }

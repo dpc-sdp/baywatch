@@ -307,4 +307,9 @@ class BaywatchOperation
     $this->baywatch_install_module('tide_spell_checker');
   }
 
+  public function enable_tide_auto_logout() {
+    // Enable tide_auto_logout module.
+    $this->baywatch_install_module('tide_auto_logout');
+  }
+
 }
