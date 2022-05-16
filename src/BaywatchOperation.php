@@ -307,9 +307,14 @@ class BaywatchOperation
     $this->baywatch_install_module('tide_spell_checker');
   }
 
-  public function enable_tide_auto_logout() {
-    // Enable tide_auto_logout module.
-    $this->baywatch_install_module('tide_auto_logout');
+  public function enable_autologout() {
+    // Enable autologout module.
+    $this->baywatch_install_module('autologout');
+    // set the default timeout value.
+    $settings = \Drupal::configFactory()
+      ->getEditable('autologout.settings');
+    $settings->set('timeout', 72000)
+      ->save();
   }
 
 }
