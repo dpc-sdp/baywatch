@@ -218,6 +218,11 @@ class BaywatchOperation
     }
   }
 
+  public function enable_coi() {
+    // Enable coi module.
+    $this->baywatch_install_module('coi');
+  }
+
   public function enable_tide_edit_protection() {
     $administrator = Role::load('administrator');
     $anonymous = Role::load('anonymous');

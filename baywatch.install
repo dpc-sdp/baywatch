@@ -36,6 +36,7 @@ function baywatch_install() {
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
   $baywatch->enable_tide_spell_checker();
+  $baywatch->enable_coi();
 }
 
 /**
@@ -388,6 +389,14 @@ function baywatch_update_8018() {
       $active_config->set('graylist', $active_graylist)->save();
     }
   }
+}
+
+/**
+ * Enable coi module.
+ */
+function baywatch_update_8019() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_coi();
 }
 
 /**
