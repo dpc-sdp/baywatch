@@ -9,6 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
@@ -38,6 +39,7 @@ function baywatch_install() {
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
   $baywatch->enable_coi();
+  $baywatch->enable_tide_content_collection();
 }
 
 /**
@@ -425,22 +427,9 @@ function baywatch_update_8021() {
 }
 
 /**
- * Adds content collection paragraph type to field_landing_page_component.
+ * Enables tide content collection.
  */
 function baywatch_update_8022() {
-  // Check if tide_api is both installed and enabled.
-  if (\Drupal::moduleHandler()->moduleExists('tide_api') === FALSE) {
-    // If not, install the tide_api module.
-    \Drupal::service('module_installer')->install(['tide_api']);
-  }
-  $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
-  if ($field) {
-    $handler_settings = $field->getSetting('handler_settings');
-    if (isset($handler_settings['target_bundles']) && !in_array('content_collection_enhanced', $handler_settings['target_bundles'])) {
-      $handler_settings['target_bundles']['content_collection_enhanced'] = 'content_collection_enhanced';
-      $handler_settings['target_bundles_drag_drop']['content_collection_enhanced']['enabled'] = TRUE;
-      $field->setSetting('handler_settings', $handler_settings);
-      $field->save();
-    }
-  }
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_content_collection();
 }

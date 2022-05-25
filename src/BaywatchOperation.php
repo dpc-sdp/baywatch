@@ -5,7 +5,7 @@ namespace Drupal\baywatch;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\user\Entity\Role;
-
+use Drupal\field\Entity\FieldConfig;
 
 class BaywatchOperation
 {
@@ -322,4 +322,20 @@ class BaywatchOperation
       ->save();
   }
 
+  public function enable_tide_content_collection() {
+    // Enable tide_api module.
+    $this->baywatch_install_module('tide_api');
+    // Enable tide_content_collection module.
+    $this->baywatch_install_module('tide_content_collection');
+    $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
+    if ($field) {
+      $handler_settings = $field->getSetting('handler_settings');
+      if (isset($handler_settings['target_bundles']) && !in_array('content_collection_enhanced', $handler_settings['target_bundles'])) {
+        $handler_settings['target_bundles']['content_collection_enhanced'] = 'content_collection_enhanced';
+        $handler_settings['target_bundles_drag_drop']['content_collection_enhanced']['enabled'] = TRUE;
+        $field->setSetting('handler_settings', $handler_settings);
+        $field->save();
+      }
+    }
+  }
 }
