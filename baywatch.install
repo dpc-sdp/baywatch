@@ -423,3 +423,24 @@ function baywatch_update_8021() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_autologout();
 }
+
+/**
+ * Adds content collection paragraph type to field_landing_page_component.
+ */
+function baywatch_update_8022() {
+  // Check if tide_api is both installed and enabled.
+  if (\Drupal::moduleHandler()->moduleExists('tide_api') === FALSE) {
+    // If not, install the tide_api module.
+    \Drupal::service('module_installer')->install(['tide_api']);
+  }
+  $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
+  if ($field) {
+    $handler_settings = $field->getSetting('handler_settings');
+    if (isset($handler_settings['target_bundles']) && !in_array('content_collection_enhanced', $handler_settings['target_bundles'])) {
+      $handler_settings['target_bundles']['content_collection_enhanced'] = 'content_collection_enhanced';
+      $handler_settings['target_bundles_drag_drop']['content_collection_enhanced']['enabled'] = TRUE;
+      $field->setSetting('handler_settings', $handler_settings);
+      $field->save();
+    }
+  }
+}
