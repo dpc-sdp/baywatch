@@ -99,6 +99,16 @@ function baywatch_import_sdpa_password_policy() {
 }
 
 /**
+ * Implements hook_update_dependencies().
+ */
+function baywatch_update_dependencies() {
+  $dependencies = [];
+  $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+
+  return $dependencies;
+}
+
+/**
  * Import sdpa password policy as an update.
  */
 function baywatch_update_8001() {
