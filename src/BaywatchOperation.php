@@ -328,6 +328,7 @@ class BaywatchOperation
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
+    // Add content collection enhanced component into landing page.
     if ($field) {
       $handler_settings = $field->getSetting('handler_settings');
       if (isset($handler_settings['target_bundles']) && !in_array('content_collection_enhanced', $handler_settings['target_bundles'])) {
@@ -337,5 +338,11 @@ class BaywatchOperation
         $field->save();
       }
     }
+    // Adding only allowed content types.
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('core.entity_form_display.paragraph.content_collection_enhanced.default');
+    $allowed_content_types = ['landing_page', 'news'];
+    $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
+    $config->save();
   }
 }
