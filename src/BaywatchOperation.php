@@ -323,8 +323,6 @@ class BaywatchOperation
   }
 
   public function enable_tide_content_collection() {
-    // Enable tide_api module.
-    $this->baywatch_install_module('tide_api');
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
