@@ -6,6 +6,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\search_api\Item\Field;
 
 class BaywatchOperation
 {
