@@ -331,7 +331,7 @@ class BaywatchOperation
     if ($field) {
       $content_collections_components = [
         'content_collection', 
-        'content_collection_enhance',
+        'content_collection_enhanced',
       ];
       foreach ($content_collections_components as $component) {
         $handler_settings = $field->getSetting('handler_settings');
