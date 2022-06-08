@@ -329,12 +329,18 @@ class BaywatchOperation
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
     // Add content collection enhanced component into landing page.
     if ($field) {
-      $handler_settings = $field->getSetting('handler_settings');
-      if (isset($handler_settings['target_bundles']) && !in_array('content_collection_enhanced', $handler_settings['target_bundles'])) {
-        $handler_settings['target_bundles']['content_collection_enhanced'] = 'content_collection_enhanced';
-        $handler_settings['target_bundles_drag_drop']['content_collection_enhanced']['enabled'] = TRUE;
-        $field->setSetting('handler_settings', $handler_settings);
-        $field->save();
+      $content_collections_components = [
+        'content_collection', 
+        'content_collection_enhance',
+      ];
+      foreach ($content_collections_components as $component) {
+        $handler_settings = $field->getSetting('handler_settings');
+        if (isset($handler_settings['target_bundles']) && !in_array($component, $handler_settings['target_bundles'])) {
+          $handler_settings['target_bundles'][$component] = $component;
+          $handler_settings['target_bundles_drag_drop'][$component]['enabled'] = TRUE;
+          $field->setSetting('handler_settings', $handler_settings);
+          $field->save();
+        }
       }
     }
     // Adding only allowed content types.
