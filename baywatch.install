@@ -9,6 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
@@ -38,6 +39,7 @@ function baywatch_install() {
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
   $baywatch->enable_coi();
+  $baywatch->enable_tide_content_collection();
 }
 
 /**
@@ -94,6 +96,16 @@ function baywatch_import_sdpa_password_policy() {
       $config_entity->save();
     }
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function baywatch_update_dependencies() {
+  $dependencies = [];
+  $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+
+  return $dependencies;
 }
 
 /**
@@ -422,4 +434,12 @@ function baywatch_update_8020() {
 function baywatch_update_8021() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_autologout();
+}
+
+/**
+ * Enables tide content collection.
+ */
+function baywatch_update_8022() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_content_collection();
 }
