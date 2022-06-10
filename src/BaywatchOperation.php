@@ -327,7 +327,7 @@ class BaywatchOperation
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
-    // Add content collection enhanced component into landing page.
+    // Add both content collection custom and enhanced to landing page.
     if ($field) {
       $content_collections_components = [
         'content_collection', 
