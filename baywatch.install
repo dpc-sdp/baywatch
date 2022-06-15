@@ -9,6 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
@@ -35,8 +36,11 @@ function baywatch_install() {
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
-  $baywatch->enable_tide_spell_checker();
   $baywatch->import_default_csp_config();
+  $baywatch->enable_tide_spell_checker();
+  $baywatch->enable_autologout();
+  $baywatch->enable_coi();
+  $baywatch->enable_tide_content_collection();
 }
 
 /**
@@ -93,6 +97,16 @@ function baywatch_import_sdpa_password_policy() {
       $config_entity->save();
     }
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function baywatch_update_dependencies() {
+  $dependencies = [];
+  $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+
+  return $dependencies;
 }
 
 /**
@@ -392,9 +406,49 @@ function baywatch_update_8018() {
 }
 
 /**
- * Check if csp enabled or not.
+ * Enable coi module.
  */
 function baywatch_update_8019() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_coi();
+}
+
+/**
+ * Corrects excluded files path in shield setting.
+ */
+function baywatch_update_8020() {
+  if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
+    $shield = \Drupal::configFactory()->getEditable('shield.settings');
+    $paths = $shield->get('paths');
+    $path_search = "/sites/default/files";
+    if (strpos($paths, $path_search) !== FALSE) {
+      $new_paths = str_replace($path_search, "/sites/default/files/*", $paths);
+      $shield->set('paths',$new_paths);
+      $shield->save();
+    }
+  }
+}
+
+/**
+ * Enables autologout module.
+ */
+function baywatch_update_8021() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_autologout();
+}
+
+/**
+ * Enables tide content collection.
+ */
+function baywatch_update_8022() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_content_collection();
+}
+
+/**
+ * Check if csp enabled or not.
+ */
+function baywatch_update_8023() {
   $seckit_config = Drupal::configFactory()->getEditable('seckit.settings');
   $condition_1 = $seckit_config->get('seckit_xss.csp.checkbox');
   $condition_2 = $seckit_config->get('seckit_xss.csp.script-src');
