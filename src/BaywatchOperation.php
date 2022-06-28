@@ -326,6 +326,13 @@ class BaywatchOperation
   public function enable_tide_content_collection() {
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
+    // It will run for first time install of tide_content_collection.
+    $this->add_cc_to_landing_page();
+  }
+
+  public function add_cc_to_landing_page() {
+    // Enable tide_content_collection module.
+    $this->baywatch_install_module('tide_content_collection');
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
     // Add both content collection custom and enhanced to landing page.
     if ($field) {

@@ -103,7 +103,7 @@ function baywatch_import_sdpa_password_policy() {
  */
 function baywatch_update_dependencies() {
   $dependencies = [];
-  $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+  $dependencies['baywatch'][8023] = ['tide_content_collection' => 8001];
 
   return $dependencies;
 }
@@ -442,4 +442,12 @@ function baywatch_update_8021() {
 function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
+}
+
+/**
+ * Add content collection to landing page.
+ */
+function baywatch_update_8023() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->add_cc_to_landing_page();
 }
