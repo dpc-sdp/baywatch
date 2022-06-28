@@ -326,6 +326,13 @@ class BaywatchOperation
   public function enable_tide_content_collection() {
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
+    // It will run for first time install of tide_content_collection.
+    $this->add_cc_to_landing_page();
+  }
+
+  public function add_cc_to_landing_page() {
+    // Enable tide_content_collection module.
+    $this->baywatch_install_module('tide_content_collection');
     $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
     // Add both content collection custom and enhanced to landing page.
     if ($field) {
@@ -347,8 +354,10 @@ class BaywatchOperation
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('core.entity_form_display.paragraph.content_collection_enhanced.default');
     $allowed_content_types = ['landing_page', 'news'];
-    $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
-    $config->save();
+    if ($config) {
+      $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
+      $config->save();
+    }
 
     // Add fields to search API.
     $index = \Drupal::entityTypeManager()
