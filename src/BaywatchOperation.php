@@ -354,8 +354,10 @@ class BaywatchOperation
     $config_factory = \Drupal::configFactory();
     $config = $config_factory->getEditable('core.entity_form_display.paragraph.content_collection_enhanced.default');
     $allowed_content_types = ['landing_page', 'news'];
-    $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
-    $config->save();
+    if ($config) {
+      $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
+      $config->save();
+    }
 
     // Add fields to search API.
     $index = \Drupal::entityTypeManager()
