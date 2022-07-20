@@ -444,16 +444,3 @@ function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
 }
-
-/**
- * Check if csp enabled or not.
- */
-function baywatch_update_8023() {
-  $seckit_config = Drupal::configFactory()->getEditable('seckit.settings');
-  $condition_1 = $seckit_config->get('seckit_xss.csp.checkbox');
-  $condition_2 = $seckit_config->get('seckit_xss.csp.script-src');
-  $condition_3 = $seckit_config->get('seckit_xss.csp.connect-src');
-  if (empty($condition_1) || empty($condition_2) || empty($condition_3)) {
-    throw new \RuntimeException('seckit.settings has incorrect settings.');
-  }
-}

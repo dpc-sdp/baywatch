@@ -5,7 +5,7 @@ seckit_xss:
     default-src: '''self'''
     script-src: '''self'' ''unsafe-inline'' svc.webspellchecker.net'
     object-src: ''
-    img-src: '''self'' data: reference.vic.gov.au *.reference.vic.gov.au content.reference.vic.gov.au *.content.reference.vic.gov.au *.amazee.io tracking.monsido.com *.google-analytics.com *.g.doubleclick.net www.google.com *.google.com *.google.com.au api.mapbox.com svc.webspellchecker.net'
+    img-src: '''self'' data: *.vic.gov.au *.amazee.io tracking.monsido.com *.google-analytics.com *.g.doubleclick.net www.google.com *.google.com *.google.com.au api.mapbox.com svc.webspellchecker.net'
     media-src: ''
     frame-src: '''self'' batchgeo.com *.vimeo.com *.youtube.com livestream.com'
     child-src: ''

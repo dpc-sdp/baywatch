@@ -388,6 +388,7 @@ class BaywatchOperation
     $index->save();
   }
 
+  // Import default SDP specific settings.
   public function import_default_csp_config() {
     module_load_include('inc', 'tide_core', 'includes/helpers');
     $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
