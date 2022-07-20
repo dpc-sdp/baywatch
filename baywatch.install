@@ -104,7 +104,9 @@ function baywatch_import_sdpa_password_policy() {
  */
 function baywatch_update_dependencies() {
   $dependencies = [];
-  $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+  if (\Drupal::service('module_handler')->moduleExists('tide_content_collection')) {
+    $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+  }
 
   return $dependencies;
 }
