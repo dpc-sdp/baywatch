@@ -9,6 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
@@ -35,9 +36,11 @@ function baywatch_install() {
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
   $baywatch->enable_tide_block_inactive_users();
+  $baywatch->import_default_csp_config();
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
   $baywatch->enable_coi();
+  $baywatch->enable_tide_content_collection();
 }
 
 /**
@@ -94,6 +97,18 @@ function baywatch_import_sdpa_password_policy() {
       $config_entity->save();
     }
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function baywatch_update_dependencies() {
+  $dependencies = [];
+  if (\Drupal::service('module_handler')->moduleExists('tide_content_collection')) {
+    $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
+  }
+
+  return $dependencies;
 }
 
 /**
@@ -424,10 +439,18 @@ function baywatch_update_8021() {
   $baywatch->enable_autologout();
 }
 
+/*
+ * Enables tide content collection.
+ */
+function baywatch_update_8022() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_content_collection();
+}
+
 /**
  * Uninstall admin_toolbar_search module
  */
-function baywatch_update_8022() {
+function baywatch_update_8023() {
   $module_installer = \Drupal::service('module_installer');
   $module_handler = \Drupal::moduleHandler();
   if ($module_handler->moduleExists('admin_toolbar_search')) {

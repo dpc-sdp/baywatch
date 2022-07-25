@@ -5,7 +5,8 @@ namespace Drupal\baywatch;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\user\Entity\Role;
-
+use Drupal\field\Entity\FieldConfig;
+use Drupal\search_api\Item\Field;
 
 class BaywatchOperation
 {
@@ -320,6 +321,82 @@ class BaywatchOperation
       ->getEditable('autologout.settings');
     $settings->set('timeout', 72000)
       ->save();
+  }
+
+  public function enable_tide_content_collection() {
+    // Enable tide_content_collection module.
+    $this->baywatch_install_module('tide_content_collection');
+    $field = FieldConfig::loadByName('node', 'landing_page', 'field_landing_page_component');
+    // Add both content collection custom and enhanced to landing page.
+    if ($field) {
+      $content_collections_components = [
+        'content_collection', 
+        'content_collection_enhanced',
+      ];
+      foreach ($content_collections_components as $component) {
+        $handler_settings = $field->getSetting('handler_settings');
+        if (isset($handler_settings['target_bundles']) && !in_array($component, $handler_settings['target_bundles'])) {
+          $handler_settings['target_bundles'][$component] = $component;
+          $handler_settings['target_bundles_drag_drop'][$component]['enabled'] = TRUE;
+          $field->setSetting('handler_settings', $handler_settings);
+          $field->save();
+        }
+      }
+    }
+    // Adding only allowed content types.
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('core.entity_form_display.paragraph.content_collection_enhanced.default');
+    $allowed_content_types = ['landing_page', 'news'];
+    if ($config) {
+      $config->set('content.field_content_collection_config.settings.content.internal.contentTypes.allowed_values', $allowed_content_types);
+      $config->save();
+    }
+
+    // Add fields to search API.
+    $index = \Drupal::entityTypeManager()
+      ->getStorage('search_api_index')
+      ->load('node');
+
+    // Index the field node site.
+    if ($index->getField('field_node_site') === NULL) {
+      $field_node_site = new Field($index, 'field_node_site');
+      $field_node_site->setType('integer');
+      $field_node_site->setPropertyPath('field_node_site');
+      $field_node_site->setDatasourceId('entity:node');
+      $field_node_site->setLabel('Site');
+      $index->addField($field_node_site);
+    }
+
+    // Index the field media image absolute path.
+    if ($index->getField('field_media_image_absolute_path') === NULL) {
+      $field_media_image_absolute_path = new Field($index, 'field_media_image_absolute_path');
+      $field_media_image_absolute_path->setType('string');
+      $field_media_image_absolute_path->setPropertyPath('field_featured_image:entity:field_media_image:entity:url');
+      $field_media_image_absolute_path->setDatasourceId('entity:node');
+      $field_media_image_absolute_path->setLabel('Featured Image » Media » Image » File » Download URL');
+      $index->addField($field_media_image_absolute_path);
+    }
+
+    // Index the field news date.
+    if ($index->getField('field_news_date') === NULL) {
+      $field_news_date = new Field($index, 'field_news_date');
+      $field_news_date->setType('date');
+      $field_news_date->setPropertyPath('field_news_date');
+      $field_news_date->setDatasourceId('entity:node');
+      $field_news_date->setLabel('Date');
+      $index->addField($field_news_date);
+    }
+
+    $index->save();
+  }
+
+  // Import default SDP specific settings.
+  public function import_default_csp_config() {
+    module_load_include('inc', 'tide_core', 'includes/helpers');
+    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $read = _tide_read_config('seckit.settings', $config_location, FALSE);
+    $config_storage = \Drupal::service('config.storage');
+    $config_storage->write('seckit.settings', $read);
   }
 
 }
