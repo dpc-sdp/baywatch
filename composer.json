@@ -19,19 +19,24 @@
     "exclude": [
         "drupal/section_purger"
     ],
-    "repositories": [
-        {
+    "repositories": {
+        "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8",
             "exclude": [
                 "drupal/section_purger"
             ]
         },
-        {
+        "drupal/section_purger": {
             "type": "git",
             "url": "https://git.drupalcode.org/issue/section_purge-3227034.git"
+        },
+        "dpc-sdp/tide_logs": {
+            "type": "vcs",
+            "no-api": true,
+            "url": "https://github.com/dpc-sdp/tide_logs.git"
         }
-    ],
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
