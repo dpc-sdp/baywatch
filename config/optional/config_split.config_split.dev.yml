@@ -1,14 +1,14 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies: { }
 id: dev
 label: dev
 description: ''
 folder: ../config/dev
 module:
   devel_generate: 0
-theme: {  }
-blacklist: {  }
+theme: { }
+blacklist: { }
 graylist:
   - config_ignore.settings
   - simple_sitemap.settings

@@ -8,8 +8,7 @@ use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Item\Field;
 
-class BaywatchOperation
-{
+class BaywatchOperation {
 
   /**
    * Helper to install a module.
@@ -31,12 +30,14 @@ class BaywatchOperation
   }
 
   public function remove_purge_lateruntime() {
-    \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
+    \Drupal::service('module_installer')
+      ->uninstall(['purge_processor_lateruntime']);
   }
 
   public function enable_preview() {
     $private = 'private://';
-    \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
+    \Drupal::service('file_system')
+      ->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
     // Install tide_oauth if not installed.
     $this->baywatch_install_module('tide_oauth');
@@ -62,7 +63,8 @@ class BaywatchOperation
 
     // Update shield config to exclude oauth path.
     if (\Drupal::moduleHandler()->moduleExists('shield') === TRUE) {
-      $shield_settings = \Drupal::configFactory()->getEditable('shield.settings');
+      $shield_settings = \Drupal::configFactory()
+        ->getEditable('shield.settings');
       $path = "/oauth\r\n/oauth/authorize\r\n/oauth/token";
       $shield_settings->set('domains', '');
       $shield_settings->set('method', 0);
@@ -90,7 +92,8 @@ class BaywatchOperation
       if ($storage->load($id) == NULL) {
         $config_entity = $storage->createFromStorageRecord($config_read);
         $config_entity->save();
-      } else {
+      }
+      else {
         $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
         $inactive_config_values = Yaml::decode(file_get_contents($config_file));
         $inactive_graylist = $inactive_config_values['graylist'];
@@ -215,7 +218,8 @@ class BaywatchOperation
     $config = \Drupal::config('system.site');
     $site_name = $config->get('name');
     if ($site_name !== 'Victoria Police' && $site_name !== 'Shared Service Provider Content Repository' && $authenticated_module_exist) {
-      \Drupal::service('module_installer')->uninstall(['tide_authenticated_content']);
+      \Drupal::service('module_installer')
+        ->uninstall(['tide_authenticated_content']);
     }
   }
 
@@ -251,9 +255,9 @@ class BaywatchOperation
   public function set_default_timezone() {
     // Change timezone to Australia/Melbourne.
     \Drupal::configFactory()
-    ->getEditable('system.date')
-    ->set('timezone.default', 'Australia/Melbourne')
-    ->save(TRUE);
+      ->getEditable('system.date')
+      ->set('timezone.default', 'Australia/Melbourne')
+      ->save(TRUE);
   }
 
   public function exclude_files_path() {
@@ -261,7 +265,7 @@ class BaywatchOperation
       $shield = \Drupal::configFactory()->getEditable('shield.settings');
       $paths = $shield->get('paths');
       $paths .= "\r\n/sites/default/files/*";
-      $shield->set('paths',$paths);
+      $shield->set('paths', $paths);
       $shield->save();
     }
   }
@@ -276,7 +280,7 @@ class BaywatchOperation
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
     $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
-    foreach($configs as $config) {
+    foreach ($configs as $config) {
       \Drupal::configFactory()->getEditable($config)->delete();
       _tide_import_single_config($config, $config_location);
     }
@@ -330,7 +334,7 @@ class BaywatchOperation
     // Add both content collection custom and enhanced to landing page.
     if ($field) {
       $content_collections_components = [
-        'content_collection', 
+        'content_collection',
         'content_collection_enhanced',
       ];
       foreach ($content_collections_components as $component) {

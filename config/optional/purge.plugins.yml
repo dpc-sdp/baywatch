@@ -1,21 +1,15 @@
 purgers:
-  -
-    order_index: 2
+  - order_index: 2
     instance_id: 8714ff77fc
     plugin_id: section
 processors:
-  -
-    plugin_id: drush_purge_queue_work
+  - plugin_id: drush_purge_queue_work
     status: true
-  -
-    plugin_id: drush_purge_invalidate
+  - plugin_id: drush_purge_invalidate
     status: true
-  -
-    plugin_id: cron
+  - plugin_id: cron
     status: true
-  -
-    plugin_id: lateruntime
+  - plugin_id: lateruntime
     status: false
-  -
-    plugin_id: purge_ui_block_processor
+  - plugin_id: purge_ui_block_processor
     status: true

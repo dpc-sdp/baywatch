@@ -1,13 +1,13 @@
 langcode: en
 status: false
-dependencies: {  }
+dependencies: { }
 id: ci
 label: ci
 description: ''
 folder: ../config/ci
-module: {  }
-theme: {  }
-blacklist: {  }
+module: { }
+theme: { }
+blacklist: { }
 graylist:
   - clamav.settings
   - simple_sitemap.settings
