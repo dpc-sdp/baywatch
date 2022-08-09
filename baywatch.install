@@ -448,3 +448,10 @@ function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
 }
+/**
+ * Enables Tide Logs module.
+ */
+function baywatch_update_8023() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->baywatch_install_module('tide_logs');
+}
