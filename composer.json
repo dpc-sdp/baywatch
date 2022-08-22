@@ -14,7 +14,8 @@
     "drupal/smtp": "^1.0@RC",
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
-    "drupal/config_split": "^1.4"
+    "drupal/config_split": "^1.4",
+    "dpc-sdp/tide_logs": "1.0.0"
   },
   "exclude": [
     "drupal/section_purger"
