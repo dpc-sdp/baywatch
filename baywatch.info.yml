@@ -23,6 +23,7 @@ dependencies:
   - smtp:smtp
   - config_split:config_split
   - jwt:jwt
+  - dpc-sdp:tide_logs
 config_devel:
   optional:
     - password_policy.password_policy.password_policy_sdpa
