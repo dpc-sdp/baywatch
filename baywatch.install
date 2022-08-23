@@ -457,3 +457,27 @@ function baywatch_update_8023() {
     $module_installer->uninstall(['admin_toolbar_search']);
   }
 }
+
+/**
+ * Uninstall tide_event_atdw.
+ */
+function baywatch_update_8024() {
+  $configs = [
+    'field.field.node.event.field_tracking_beacon',
+    'field.storage.node.field_tracking_beacon',
+    'migrate_plus.migration.tide_event_atdw',
+    'migrate_plus.migration.tide_event_atdw_details',
+    'migrate_plus.migration.tide_event_atdw_image',
+    'migrate_plus.migration.tide_event_atdw_image_file',
+    'migrate_plus.migration_group.atdw_event',
+    'tide_event_atdw.settings',
+  ];
+  $module_handler = \Drupal::moduleHandler();
+  $tide_event_atdw_module_exist = $module_handler->moduleExists('tide_event_atdw');
+  if ($tide_event_atdw_module_exist) {
+    foreach ($configs as $value) {
+      \Drupal::configFactory()->getEditable($value)->delete();
+    }
+    \Drupal::service('module_installer')->uninstall(['tide_event_atdw']);
+  }
+}
