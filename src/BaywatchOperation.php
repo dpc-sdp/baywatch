@@ -403,4 +403,10 @@ class BaywatchOperation {
     $config_storage->write('seckit.settings', $read);
   }
 
+  public function enable_tide_logs() {
+    // Enable tide_logs module.
+    $this->baywatch_install_module('tide_logs');
+  }
+
 }
+

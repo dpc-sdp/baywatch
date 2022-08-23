@@ -41,6 +41,7 @@ function baywatch_install() {
   $baywatch->enable_autologout();
   $baywatch->enable_coi();
   $baywatch->enable_tide_content_collection();
+  $baywatch->enable_tide_logs();
 }
 
 /**
@@ -104,8 +105,7 @@ function baywatch_import_sdpa_password_policy() {
  */
 function baywatch_update_dependencies() {
   $dependencies = [];
-  if (\Drupal::service('module_handler')
-    ->moduleExists('tide_content_collection')) {
+  if (\Drupal::service('module_handler')->moduleExists('tide_content_collection')) {
     $dependencies['baywatch'][8022] = ['tide_content_collection' => 8001];
   }
 
@@ -154,7 +154,8 @@ function baywatch_update_8003() {
     try {
       \Drupal::messenger()->addMessage("Dropping obsolete table ${table}");
       \Drupal::database()->query(sprintf("DROP TABLE %s;", $table));
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       \Drupal::messenger()->addMessage("Error when dropping table ${table}");
       \Drupal::logger('baywatch')->error($e->getMessage());
     }
@@ -226,8 +227,7 @@ function baywatch_update_8005() {
  */
 function baywatch_update_8006() {
   $private = 'private://';
-  \Drupal::service('file_system')
-    ->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
+  \Drupal::service('file_system')->prepareDirectory($private, FileSystemInterface::CREATE_DIRECTORY);
 
   // Check if tide_oauth is both installed and enabled.
   if (\Drupal::moduleHandler()->moduleExists('tide_oauth') === FALSE) {
@@ -318,8 +318,7 @@ function baywatch_update_8009() {
  * Uninstall the late runtime processor.
  */
 function baywatch_update_8010() {
-  \Drupal::service('module_installer')
-    ->uninstall(['purge_processor_lateruntime']);
+  \Drupal::service('module_installer')->uninstall(['purge_processor_lateruntime']);
 }
 
 /**
@@ -441,7 +440,7 @@ function baywatch_update_8021() {
   $baywatch->enable_autologout();
 }
 
-/**
+/*
  * Enables tide content collection.
  */
 function baywatch_update_8022() {
@@ -453,5 +452,40 @@ function baywatch_update_8022() {
  */
 function baywatch_update_8023() {
   $baywatch = new BaywatchOperation();
-  $baywatch->baywatch_install_module('tide_logs');
+  $baywatch->enable_tide_logs();
+}
+
+/**
+ * Uninstall admin_toolbar_search module
+ */
+function baywatch_update_8024() {
+  $module_installer = \Drupal::service('module_installer');
+  $module_handler = \Drupal::moduleHandler();
+  if ($module_handler->moduleExists('admin_toolbar_search')) {
+    $module_installer->uninstall(['admin_toolbar_search']);
+  }
+}
+
+/**
+ * Uninstall tide_event_atdw.
+ */
+function baywatch_update_8025() {
+  $configs = [
+    'field.field.node.event.field_tracking_beacon',
+    'field.storage.node.field_tracking_beacon',
+    'migrate_plus.migration.tide_event_atdw',
+    'migrate_plus.migration.tide_event_atdw_details',
+    'migrate_plus.migration.tide_event_atdw_image',
+    'migrate_plus.migration.tide_event_atdw_image_file',
+    'migrate_plus.migration_group.atdw_event',
+    'tide_event_atdw.settings',
+  ];
+  $module_handler = \Drupal::moduleHandler();
+  $tide_event_atdw_module_exist = $module_handler->moduleExists('tide_event_atdw');
+  if ($tide_event_atdw_module_exist) {
+    foreach ($configs as $value) {
+      \Drupal::configFactory()->getEditable($value)->delete();
+    }
+    \Drupal::service('module_installer')->uninstall(['tide_event_atdw']);
+  }
 }
