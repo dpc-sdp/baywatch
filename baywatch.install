@@ -439,10 +439,21 @@ function baywatch_update_8021() {
   $baywatch->enable_autologout();
 }
 
-/**
+/*
  * Enables tide content collection.
  */
 function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
+}
+
+/**
+ * Uninstall admin_toolbar_search module
+ */
+function baywatch_update_8023() {
+  $module_installer = \Drupal::service('module_installer');
+  $module_handler = \Drupal::moduleHandler();
+  if ($module_handler->moduleExists('admin_toolbar_search')) {
+    $module_installer->uninstall(['admin_toolbar_search']);
+  }
 }
