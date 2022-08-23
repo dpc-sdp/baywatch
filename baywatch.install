@@ -41,6 +41,7 @@ function baywatch_install() {
   $baywatch->enable_autologout();
   $baywatch->enable_coi();
   $baywatch->enable_tide_content_collection();
+  $baywatch->enable_tide_logs();
 }
 
 /**
@@ -425,7 +426,7 @@ function baywatch_update_8020() {
     $path_search = "/sites/default/files";
     if (strpos($paths, $path_search) !== FALSE) {
       $new_paths = str_replace($path_search, "/sites/default/files/*", $paths);
-      $shield->set('paths',$new_paths);
+      $shield->set('paths', $new_paths);
       $shield->save();
     }
   }
@@ -446,11 +447,18 @@ function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
 }
+/**
+ * Enables Tide Logs module.
+ */
+function baywatch_update_8023() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_logs();
+}
 
 /**
  * Uninstall admin_toolbar_search module
  */
-function baywatch_update_8023() {
+function baywatch_update_8024() {
   $module_installer = \Drupal::service('module_installer');
   $module_handler = \Drupal::moduleHandler();
   if ($module_handler->moduleExists('admin_toolbar_search')) {
@@ -461,7 +469,7 @@ function baywatch_update_8023() {
 /**
  * Uninstall tide_event_atdw.
  */
-function baywatch_update_8024() {
+function baywatch_update_8025() {
   $configs = [
     'field.field.node.event.field_tracking_beacon',
     'field.storage.node.field_tracking_beacon',

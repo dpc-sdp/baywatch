@@ -1,37 +1,43 @@
 {
-    "name": "dpc-sdp/baywatch",
-    "description": "Configuration for integration with Bay hosting platform",
-    "type": "drupal-module",
-    "license": "GPL-2.0-or-later",
-    "require": {
-        "drupal/autologout": "^1.3",
-        "drush/drush": "^10.3",
-        "drupal/coi": "^3",
-        "drupal/purge": "3.0",
-        "drupal/purge_queuer_url": "^1.0@RC",
-        "drupal/section_purger": "dev-updates_to_compatible_with_drupal_9",
-        "drupal/redis": "^1.0",
-        "drupal/smtp": "^1.0@RC",
-        "drupal/queue_mail": "^1",
-        "drupal/jwt": "^1.0",
-        "drupal/config_split": "^1.4"
-    },
-    "exclude": [
+  "name": "dpc-sdp/baywatch",
+  "description": "Configuration for integration with Bay hosting platform",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "drupal/autologout": "^1.3",
+    "drush/drush": "^10.3",
+    "drupal/coi": "^3",
+    "drupal/purge": "3.0",
+    "drupal/purge_queuer_url": "^1.0@RC",
+    "drupal/section_purger": "dev-updates_to_compatible_with_drupal_9",
+    "drupal/redis": "^1.0",
+    "drupal/smtp": "^1.0@RC",
+    "drupal/queue_mail": "^1",
+    "drupal/jwt": "^1.0",
+    "drupal/config_split": "^1.4",
+    "dpc-sdp/tide_logs": "1.0.0"
+  },
+  "exclude": [
+    "drupal/section_purger"
+  ],
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8",
+      "exclude": [
         "drupal/section_purger"
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8",
-            "exclude": [
-                "drupal/section_purger"
-            ]
-        },
-        {
-            "type": "git",
-            "url": "https://git.drupalcode.org/issue/section_purge-3227034.git"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true
+      ]
+    },
+    "drupal/section_purger": {
+      "type": "git",
+      "url": "https://git.drupalcode.org/issue/section_purge-3227034.git"
+    },
+    "dpc-sdp/tide_logs": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_logs"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
