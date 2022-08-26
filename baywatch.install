@@ -491,7 +491,7 @@ function baywatch_update_8025() {
 }
 
 /**
- * Uninstall admin_toolbar_search module
+ * Uninstall jsonapi_earlyrendering_workaround module
  */
 function baywatch_update_8026() {
   $module_installer = \Drupal::service('module_installer');
