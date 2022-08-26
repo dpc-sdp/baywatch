@@ -489,3 +489,14 @@ function baywatch_update_8025() {
     \Drupal::service('module_installer')->uninstall(['tide_event_atdw']);
   }
 }
+
+/**
+ * Uninstall admin_toolbar_search module
+ */
+function baywatch_update_8026() {
+  $module_installer = \Drupal::service('module_installer');
+  $module_handler = \Drupal::moduleHandler();
+  if ($module_handler->moduleExists('jsonapi_earlyrendering_workaround')) {
+    $module_installer->uninstall(['jsonapi_earlyrendering_workaround']);
+  }
+}
