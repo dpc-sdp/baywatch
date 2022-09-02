@@ -10,6 +10,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_install().
@@ -471,8 +472,6 @@ function baywatch_update_8024() {
  */
 function baywatch_update_8025() {
   $configs = [
-    'field.field.node.event.field_tracking_beacon',
-    'field.storage.node.field_tracking_beacon',
     'migrate_plus.migration.tide_event_atdw',
     'migrate_plus.migration.tide_event_atdw_details',
     'migrate_plus.migration.tide_event_atdw_image',
@@ -483,6 +482,14 @@ function baywatch_update_8025() {
   $module_handler = \Drupal::moduleHandler();
   $tide_event_atdw_module_exist = $module_handler->moduleExists('tide_event_atdw');
   if ($tide_event_atdw_module_exist) {
+    $field = FieldConfig::load('node.event.field_tracking_beacon');
+    if ($field){
+      $field->delete();
+    }
+    $field_storage_config = FieldStorageConfig::load('node.field_tracking_beacon');
+    if ($field_storage_config){
+      $field_storage_config->delete();
+    }
     foreach ($configs as $value) {
       \Drupal::configFactory()->getEditable($value)->delete();
     }
