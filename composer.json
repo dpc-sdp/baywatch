@@ -39,5 +39,12 @@
     }
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "extra": {
+    "patches": {
+        "drupal/smtp": {
+            "Migrate config from D7 to D8 - https://www.drupal.org/project/smtp/issues/3190531#comment-14652119": "https://www.drupal.org/files/issues/2022-08-15/3190531-12.patch"
+        }
+    }
+  }
 }
