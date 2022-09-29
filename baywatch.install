@@ -89,7 +89,7 @@ function baywatch_import_sdpa_password_policy() {
     'password_policy.password_policy.password_policy_sdpa' => 'password_policy',
   ];
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
   foreach ($configs as $config => $type) {
     $config_read = _tide_read_config($config, $config_location, TRUE);
     $storage = \Drupal::entityTypeManager()->getStorage($type);
@@ -171,7 +171,7 @@ function baywatch_update_8004() {
     'key.key.authenticated_content' => 'key',
   ];
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
   // Check if field already exported to config/sync.
   foreach ($configs as $config => $type) {
     $config_read = _tide_read_config($config, $config_location, TRUE);
@@ -194,7 +194,7 @@ function baywatch_update_8005() {
     'config_split.config_split.local' => 'config_split',
   ];
   module_load_include('inc', 'tide_core', 'includes/helpers');
-  $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+  $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
   // Check if field already exported to config/sync.
   foreach ($configs as $config => $type) {
     $config_read = _tide_read_config($config, $config_location, TRUE);
@@ -205,7 +205,7 @@ function baywatch_update_8005() {
       $config_entity->save();
     }
     else {
-      $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
+      $config_file = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional/' . $config . '.yml';
       $inactive_config_values = Yaml::decode(file_get_contents($config_file));
       $inactive_graylist = $inactive_config_values['graylist'];
       $active_config = \Drupal::configFactory()->getEditable($config);

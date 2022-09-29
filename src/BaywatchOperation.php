@@ -83,7 +83,7 @@ class BaywatchOperation {
       'config_split.config_split.local' => 'config_split',
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     // Check if field already exported to config/sync.
     foreach ($configs as $config => $type) {
       $config_read = _tide_read_config($config, $config_location, TRUE);
@@ -94,7 +94,7 @@ class BaywatchOperation {
         $config_entity->save();
       }
       else {
-        $config_file = DRUPAL_ROOT . '/' . drupal_get_path('module', 'baywatch') . '/config/optional/' . $config . '.yml';
+        $config_file = DRUPAL_ROOT . '/' . \Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional/' . $config . '.yml';
         $inactive_config_values = Yaml::decode(file_get_contents($config_file));
         $inactive_graylist = $inactive_config_values['graylist'];
         $active_config = \Drupal::configFactory()->getEditable($config);
@@ -127,7 +127,7 @@ class BaywatchOperation {
       'key.key.authenticated_content' => 'key',
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     // Check if field already exported to config/sync.
     foreach ($configs as $config => $type) {
       $config_read = _tide_read_config($config, $config_location, TRUE);
@@ -184,7 +184,7 @@ class BaywatchOperation {
       'password_policy.password_policy.password_policy_sdpa' => 'password_policy',
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     foreach ($configs as $config => $type) {
       $config_read = _tide_read_config($config, $config_location, TRUE);
       $storage = \Drupal::entityTypeManager()->getStorage($type);
@@ -279,7 +279,7 @@ class BaywatchOperation {
       'section_purger.settings.8714ff77fc',
     ];
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     foreach ($configs as $config) {
       \Drupal::configFactory()->getEditable($config)->delete();
       _tide_import_single_config($config, $config_location);
@@ -397,7 +397,7 @@ class BaywatchOperation {
   // Import default SDP specific settings.
   public function import_default_csp_config() {
     module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [drupal_get_path('module', 'baywatch') . '/config/optional'];
+    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     $read = _tide_read_config('seckit.settings', $config_location, FALSE);
     $config_storage = \Drupal::service('config.storage');
     $config_storage->write('seckit.settings', $read);
