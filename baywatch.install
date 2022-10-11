@@ -36,7 +36,6 @@ function baywatch_install() {
   $baywatch->set_default_timezone();
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
-  $baywatch->enable_tide_block_inactive_users();
   $baywatch->import_default_csp_config();
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
@@ -355,14 +354,6 @@ function baywatch_update_8013() {
 function baywatch_update_8014() {
   $baywatch = new BaywatchOperation();
   $baywatch->exclude_files_path();
-}
-
-/**
- * Enables tide_block_inactive_users module.
- */
-function baywatch_update_8015() {
-  $baywatch = new BaywatchOperation();
-  $baywatch->enable_tide_block_inactive_users();
 }
 
 /**
