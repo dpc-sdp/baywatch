@@ -36,7 +36,6 @@ function baywatch_install() {
   $baywatch->set_default_timezone();
   $baywatch->exclude_files_path();
   $baywatch->import_default_section_config();
-  $baywatch->enable_tide_block_inactive_users();
   $baywatch->import_default_csp_config();
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
@@ -358,14 +357,6 @@ function baywatch_update_8014() {
 }
 
 /**
- * Enables tide_block_inactive_users module.
- */
-function baywatch_update_8015() {
-  $baywatch = new BaywatchOperation();
-  $baywatch->enable_tide_block_inactive_users();
-}
-
-/**
  * Uninstall permissions_by_term.
  * Except Vicpol and SSP.
  */
@@ -505,5 +496,34 @@ function baywatch_update_8026() {
   $module_handler = \Drupal::moduleHandler();
   if ($module_handler->moduleExists('jsonapi_earlyrendering_workaround')) {
     $module_installer->uninstall(['jsonapi_earlyrendering_workaround']);
+  }
+}
+
+/**
+ * Uninstall tide_block_inactive_users module
+ */
+function baywatch_update_8027() {
+  $config = 'tide_block_inactive_users.settings';
+  $module_handler = \Drupal::moduleHandler();
+  $tide_block_inactive_users = $module_handler->moduleExists('tide_block_inactive_users');
+  if ($tide_block_inactive_users) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+    \Drupal::service('module_installer')->uninstall(['tide_block_inactive_users']);
+  }
+}
+
+/**
+ * Uninstall block_inactive_users module
+ */
+function baywatch_update_8028() {
+  $configs = [
+    'block_inactive_users.settings',
+    'block_inactive_users.settings_cancel_users',
+  ];
+  $module_handler = \Drupal::moduleHandler();
+  $tide_block_inactive_users = $module_handler->moduleExists('block_inactive_users');
+  if ($tide_block_inactive_users) {
+    \Drupal::configFactory()->getEditable($config)->delete();
+    \Drupal::service('module_installer')->uninstall(['block_inactive_users']);
   }
 }

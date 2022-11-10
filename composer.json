@@ -11,7 +11,7 @@
     "drupal/purge_queuer_url": "^1.0@RC",
     "drupal/section_purger": "dev-updates_to_compatible_with_drupal_9",
     "drupal/redis": "^1.0",
-    "drupal/smtp": "^1.0@RC",
+    "drupal/smtp": "^1.2",
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^1.4",
@@ -39,12 +39,5 @@
     }
   },
   "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
-    "patches": {
-        "drupal/smtp": {
-            "Migrate config from D7 to D8 - https://www.drupal.org/project/smtp/issues/3190531#comment-14652119": "https://www.drupal.org/files/issues/2022-08-15/3190531-12.patch"
-        }
-    }
-  }
+  "prefer-stable": true
 }
