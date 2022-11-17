@@ -527,3 +527,36 @@ function baywatch_update_8028() {
     \Drupal::service('module_installer')->uninstall(['block_inactive_users']);
   }
 }
+
+/**
+ * Update seckit settings
+ * Adds 'cdn.jsdelivr.net' and 'data:' caused by tide_spell_checker
+ */
+function baywatch_update_8029() {
+  $config_factory = \Drupal::configFactory();
+  $seckit_config = $config_factory->getEditable('seckit.settings');
+
+  // Add 'cdn.jsdelivr.net'
+  $srcs = [
+    'seckit_xss.csp.script-src',
+    'seckit_xss.csp.fort-src',
+    'seckit_xss.csp.style-src',
+  ];
+  $domain = 'cdn.jsdelivr.net';
+  foreach ($srcs as $src) {
+    $seckit_str = $seckit_config->get($src);
+    if (strpos($seckit_str, $domain) === FALSE) {
+      $seckit_config->set($src, $seckit_str . ' ' . $domain);
+      $seckit_config->save();
+    }
+  }
+
+  // Add 'data:'
+  $src = 'seckit_xss.csp.fort-src';
+  $domain = 'data:';
+  $seckit_str = $seckit_config->get($src);
+  if (strpos($seckit_str, $domain) === FALSE) {
+    $seckit_config->set($src, $seckit_str . ' ' . $domain);
+    $seckit_config->save();
+  }
+}
