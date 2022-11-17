@@ -539,7 +539,7 @@ function baywatch_update_8029() {
   // Add 'cdn.jsdelivr.net'
   $srcs = [
     'seckit_xss.csp.script-src',
-    'seckit_xss.csp.fort-src',
+    'seckit_xss.csp.font-src',
     'seckit_xss.csp.style-src',
   ];
   $domain = 'cdn.jsdelivr.net';
@@ -552,7 +552,7 @@ function baywatch_update_8029() {
   }
 
   // Add 'data:'
-  $src = 'seckit_xss.csp.fort-src';
+  $src = 'seckit_xss.csp.font-src';
   $domain = 'data:';
   $seckit_str = $seckit_config->get($src);
   if (strpos($seckit_str, $domain) === FALSE) {
