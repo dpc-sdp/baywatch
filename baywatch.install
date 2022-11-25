@@ -11,6 +11,7 @@ use Drupal\baywatch\BaywatchOperation;
 use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_install().
@@ -558,5 +559,35 @@ function baywatch_update_8029() {
   if (strpos($seckit_str, $domain) === FALSE) {
     $seckit_config->set($src, $seckit_str . ' ' . $domain);
     $seckit_config->save();
+  }
+}
+
+/**
+ * remove any existing nodes of type page content type
+ */
+function baywatch_update_8030()
+{
+  $nids = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
+  if (!empty($nids)) {
+    foreach ($nids as $value) {
+      $node = Node::load($value);
+      $node->delete();
+    }
+  }
+  if (empty($nids)) {
+    $content_type = \Drupal::entityTypeManager()->getStorage('node_type')->load('page');
+    $content_type->delete();
+  }
+}
+
+/**
+ * remove page content type
+ */
+function baywatch_update_8031()
+{
+  $nids = \Drupal::entityQuery('node')->condition('type', 'page')->execute();
+  if (empty($nids)) {
+    $content_type = \Drupal::entityTypeManager()->getStorage('node_type')->load('page');
+    $content_type->delete();
   }
 }
