@@ -408,5 +408,8 @@ class BaywatchOperation {
     $this->baywatch_install_module('tide_logs');
   }
 
-}
+  public function enable_tide_ckeditor() {
+    $this->baywatch_install_module('tide_ckeditor');
+  }
 
+}
