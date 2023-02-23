@@ -408,5 +408,10 @@ class BaywatchOperation {
     $this->baywatch_install_module('tide_logs');
   }
 
+  public function enable_tide_site_alert() {
+    // Enable tide_site_alert module.
+    $this->baywatch_install_module('tide_site_alert');
+  }
+
 }
 
