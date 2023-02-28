@@ -11,15 +11,12 @@
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^1.4",
-    "dpc-sdp/bay_platform_dependencies": "dev-feature/DDS-1343--init-bay_platform_deps"
+    "dpc-sdp/bay_platform_dependencies": "^1.0"
   },
   "repositories": {
     "drupal": {
       "type": "composer",
-      "url": "https://packages.drupal.org/8",
-      "exclude": [
-        "drupal/section_purger"
-      ]
+      "url": "https://packages.drupal.org/8"
     }
   },
   "minimum-stability": "dev",
