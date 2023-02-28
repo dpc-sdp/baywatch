@@ -42,6 +42,7 @@ function baywatch_install() {
   $baywatch->enable_coi();
   $baywatch->enable_tide_content_collection();
   $baywatch->enable_tide_logs();
+  $baywatch->enable_tide_site_alert();
   $baywatch->enable_bay_platform_dependencies();
 }
 
@@ -440,6 +441,7 @@ function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
 }
+
 /**
  * Enables Tide Logs module.
  */
@@ -560,6 +562,14 @@ function baywatch_update_8029() {
     $seckit_config->set($src, $seckit_str . ' ' . $domain);
     $seckit_config->save();
   }
+}
+
+/**
+ * Enables Tide Site Alert module.
+ */
+function baywatch_update_8030() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_site_alert();
 }
 
 /**
