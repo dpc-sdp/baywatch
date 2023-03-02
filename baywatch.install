@@ -575,7 +575,7 @@ function baywatch_update_8030() {
 /**
  * Enables bay_platform_dependencies module.
  */
-function baywatch_update_8030() {
+function baywatch_update_8031() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_bay_platform_dependencies();
 }
