@@ -413,5 +413,10 @@ class BaywatchOperation {
     $this->baywatch_install_module('tide_site_alert');
   }
 
+  public function enable_bay_platform_dependencies() {
+    // Enable bay_platform_dependencies module.
+    $this->baywatch_install_module('bay_platform_dependencies');
+  }
+
 }
 
