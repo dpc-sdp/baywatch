@@ -42,6 +42,8 @@ function baywatch_install() {
   $baywatch->enable_coi();
   $baywatch->enable_tide_content_collection();
   $baywatch->enable_tide_logs();
+  $baywatch->enable_tide_site_alert();
+  $baywatch->enable_bay_platform_dependencies();
   $baywatch->enable_tide_ckeditor();
 }
 
@@ -440,6 +442,7 @@ function baywatch_update_8022() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_content_collection();
 }
+
 /**
  * Enables Tide Logs module.
  */
@@ -563,9 +566,25 @@ function baywatch_update_8029() {
 }
 
 /**
- * Enable tide_ckeditor module for Ckeditor5 upgrade.
+ * Enables Tide Site Alert module.
  */
 function baywatch_update_8030() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_site_alert();
+}
+
+/**
+ * Enables bay_platform_dependencies module.
+ */
+function baywatch_update_8031() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_bay_platform_dependencies();
+}
+
+/**
+ * Enable tide_ckeditor module for Ckeditor5 upgrade.
+ */
+function baywatch_update_8032() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_ckeditor();
 }
