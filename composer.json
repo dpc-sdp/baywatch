@@ -11,12 +11,16 @@
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^1.4",
-    "dpc-sdp/bay_platform_dependencies": "^1.0"
+    "dpc-sdp/bay_platform_dependencies": "dev-feature/DDS-871-redis-patch"
   },
   "repositories": {
     "drupal": {
       "type": "composer",
       "url": "https://packages.drupal.org/8"
+    },
+    "dpc-sdp/bay_platform_dependencies": {
+      "type": "git",
+      "url": "https://github.com/dpc-sdp/bay_platform_dependencies.git"
     }
   },
   "minimum-stability": "dev",
