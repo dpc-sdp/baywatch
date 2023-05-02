@@ -11,7 +11,8 @@
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^1.4",
-    "dpc-sdp/bay_platform_dependencies": "^1.0"
+    "dpc-sdp/bay_platform_dependencies": "^1.0",
+    "drupal/monitoring": "^1.13"
   },
   "repositories": {
     "drupal": {

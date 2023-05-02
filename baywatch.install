@@ -579,3 +579,12 @@ function baywatch_update_8031() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_bay_platform_dependencies();
 }
+
+/**
+ * Enable and configure the monitoring module and sensors.
+ */
+function baywatch_update_8032() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_monitoring();
+  $baywatch->ensure_sensor_configuration();
+}

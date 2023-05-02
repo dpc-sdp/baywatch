@@ -7,8 +7,40 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Item\Field;
+use Drupal\monitoring\Entity\SensorConfig;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Entity\EntityStorageException;
 
 class BaywatchOperation {
+
+
+  public function ensure_sensor_configuration() {
+    if (\Drupal::service('module_handler')->moduleExists('section_purger')) {
+      $section_sensor = SensorConfig::create(array(
+        'id' => 'section_purger',
+        'label' => 'Section Purger',
+        'description' => 'Connectivity Status of the Section Purger',
+        'plugin_id' => 'tide_external_service',
+        'value_label' => 'Section Purger',
+        'category' => 'Baywatch',
+        'status' => TRUE,
+        'caching_time' => 300,
+        'settings' => array(
+          'check_type' => 'section'
+        ),
+        'thresholds' => array(
+          'type' => 'exceeds',
+          'warning' => 0,
+          'critical' => 0,
+        ),
+      ));
+      try {
+        $section_sensor->save();
+      } catch (EntityStorageException $e) {
+        \Drupal::messenger()->addMessage("section_purger sensor already configured.");
+      }
+    }
+  }
 
   /**
    * Helper to install a module.
@@ -417,6 +449,13 @@ class BaywatchOperation {
     // Enable bay_platform_dependencies module.
     $this->baywatch_install_module('bay_platform_dependencies');
   }
+
+  public function enable_monitoring() {
+      // Enable monitoring module.
+      $this->baywatch_install_module('monitoring');
+  }
+
+
 
 }
 
