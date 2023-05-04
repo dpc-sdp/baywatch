@@ -47,8 +47,7 @@ class TideExternalServiceSensorTwitterSupport implements TideExternalServiceSupp
       return $this->postManager;
     }
 
-    public function runCheck(SensorResultInterface &$result)
-    {
+    public function runCheck(SensorResultInterface &$result) {
       $config = \Drupal::config('social_post_twitter.settings');
       $consumer = $config->get('consumer_key');
       $secret = $config->get('consumer_secret');

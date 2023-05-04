@@ -34,16 +34,14 @@ class TideExternalServiceSensorSectionSupport implements TideExternalServiceSupp
     /**
      * @inheritDoc
      */
-    public static function create(ContainerInterface $container)
-    {
+    public static function create(ContainerInterface $container) {
       return new static(
         $container->get('http_client'),
         $container->get('key.repository')
       );
     }
 
-    public function runCheck(SensorResultInterface &$result)
-    {
+    public function runCheck(SensorResultInterface &$result) {
       $purgers = SectionPurgerSettings::loadMultiple();
       $purger = reset($purgers);
 

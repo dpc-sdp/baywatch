@@ -421,8 +421,8 @@ class BaywatchOperation {
   }
 
   public function enable_monitoring() {
-      // Enable monitoring module.
-      $this->baywatch_install_module('monitoring');
+    // Enable monitoring module.
+    $this->baywatch_install_module('monitoring');
   }
 
   public function reset_sensor_config() {
@@ -456,7 +456,9 @@ class BaywatchOperation {
       ),
     ));
   }
+
   public function ensure_sensor_configuration() {
+    // Install the appropriate set of custom sensors based on enabled modules.
     if (\Drupal::service('module_handler')->moduleExists('section_purger')) {
       $sensor = $this->create_sensor(
         'section_purger',

@@ -17,8 +17,8 @@ use Drupal\baywatch\Plugin\monitoring\Support\TideExternalServiceSensorVuelioSup
  *
  * @SensorPlugin(
  *   id = "tide_external_service",
- *   label = @Translation("My Custom Sensor"),
- *   description = @Translation("Description of your custom sensor."),
+ *   label = @Translation("Tide External Service Sensor"),
+ *   description = @Translation("Checks connectivity to external services used by Tide sites."),
  *   provider = "baywatch",
  * )
  */
@@ -42,8 +42,7 @@ class TideExternalServiceSensorPlugin extends SensorPluginBase implements Sensor
       );
     }
 
-    public function runSensor(SensorResultInterface $result)
-    {
+    public function runSensor(SensorResultInterface $result) {
         $check_type = $this->sensorConfig->getSetting('check_type');
         switch ($check_type) {
           case 'section':
@@ -63,7 +62,7 @@ class TideExternalServiceSensorPlugin extends SensorPluginBase implements Sensor
 
 
     protected function checkSection(SensorResultInterface &$result) {
-      // Just in case the required modules have become uninstalled.
+      // Check that required modules and classes still exist in case they have been inadvertently removed.
       $required_modules_classes_exist = \Drupal::moduleHandler()->moduleExists('section_purger') && \Drupal::moduleHandler()->moduleExists('key');
 
       if ($required_modules_classes_exist) {
@@ -76,7 +75,7 @@ class TideExternalServiceSensorPlugin extends SensorPluginBase implements Sensor
     }
 
     protected function checkMailgun(SensorResultInterface &$result) {
-
+      // Check that required modules and classes still exist in case they have been inadvertently removed.
       $required_modules_classes_exist = \Drupal::moduleHandler()->moduleExists('tide_mailgun') && class_exists('\Mailgun\Mailgun');
 
       if ($required_modules_classes_exist) {
@@ -90,7 +89,7 @@ class TideExternalServiceSensorPlugin extends SensorPluginBase implements Sensor
     }
 
     protected function checkTwitter(SensorResultInterface &$result) {
-
+      // Check that required modules and classes still exist in case they have been inadvertently removed.
       $required_modules_classes_exist = \Drupal::moduleHandler()->moduleExists('social_api') && \Drupal::moduleHandler()->moduleExists('social_post') && class_exists('\Abraham\TwitterOAuth\TwitterOAuth');
 
       if ($required_modules_classes_exist) {
@@ -104,7 +103,7 @@ class TideExternalServiceSensorPlugin extends SensorPluginBase implements Sensor
     }
 
     protected function checkVuelio(SensorResultInterface &$result) {
-
+      // Check that required modules and classes still exist in case they have been inadvertently removed.
       $required_modules_classes_exist = \Drupal::moduleHandler()->moduleExists('vicpol_vuelio');
 
       if ($required_modules_classes_exist) {

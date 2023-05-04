@@ -586,6 +586,8 @@ function baywatch_update_8031() {
 function baywatch_update_8032() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_monitoring();
+  // Remove all default sensors installed by the monitoring module as we don't want them.
   $baywatch->reset_sensor_config();
+  // Install our custom sensors.
   $baywatch->ensure_sensor_configuration();
 }

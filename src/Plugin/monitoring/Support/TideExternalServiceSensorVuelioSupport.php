@@ -15,7 +15,7 @@ class TideExternalServiceSensorVuelioSupport implements TideExternalServiceSuppo
     protected $vuelio;
 
     /**
-     *
+     * @var
      */
     protected $module_handler;
 
@@ -43,7 +43,7 @@ class TideExternalServiceSensorVuelioSupport implements TideExternalServiceSuppo
       return \Drupal::service('vicpol_vuelio.vuelio_services');
     }
 
-    public function runCheck(SensorResultInterface &$result){
+    public function runCheck(SensorResultInterface &$result) {
       try {
         if (!$this->getVuelioService()->vuelioFetchXmlData(TRUE)) {
           $result->setStatus(SensorResultInterface::STATUS_CRITICAL);
