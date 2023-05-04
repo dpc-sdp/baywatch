@@ -586,5 +586,6 @@ function baywatch_update_8031() {
 function baywatch_update_8032() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_monitoring();
+  $baywatch->reset_sensor_config();
   $baywatch->ensure_sensor_configuration();
 }

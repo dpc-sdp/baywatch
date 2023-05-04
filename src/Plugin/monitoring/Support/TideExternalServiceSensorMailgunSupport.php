@@ -8,6 +8,7 @@ use Drupal\tide_mailgun\Constants;
 use Drupal\tide_mailgun\Utils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Mailgun\Mailgun;
 
 class TideExternalServiceSensorMailgunSupport implements TideExternalServiceSupportInterface, ContainerInjectionInterface {
     /**
@@ -52,5 +53,5 @@ class TideExternalServiceSensorMailgunSupport implements TideExternalServiceSupp
       $result->setStatus('Mailgun OK!');
       $result->setValue(TRUE);
     }
-    }
+
 }

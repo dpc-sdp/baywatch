@@ -8,39 +8,9 @@ use Drupal\user\Entity\Role;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Item\Field;
 use Drupal\monitoring\Entity\SensorConfig;
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityStorageException;
 
 class BaywatchOperation {
-
-
-  public function ensure_sensor_configuration() {
-    if (\Drupal::service('module_handler')->moduleExists('section_purger')) {
-      $section_sensor = SensorConfig::create(array(
-        'id' => 'section_purger',
-        'label' => 'Section Purger',
-        'description' => 'Connectivity Status of the Section Purger',
-        'plugin_id' => 'tide_external_service',
-        'value_label' => 'Section Purger',
-        'category' => 'Baywatch',
-        'status' => TRUE,
-        'caching_time' => 300,
-        'settings' => array(
-          'check_type' => 'section'
-        ),
-        'thresholds' => array(
-          'type' => 'exceeds',
-          'warning' => 0,
-          'critical' => 0,
-        ),
-      ));
-      try {
-        $section_sensor->save();
-      } catch (EntityStorageException $e) {
-        \Drupal::messenger()->addMessage("section_purger sensor already configured.");
-      }
-    }
-  }
 
   /**
    * Helper to install a module.
@@ -455,7 +425,99 @@ class BaywatchOperation {
       $this->baywatch_install_module('monitoring');
   }
 
+  public function reset_sensor_config() {
+    // Purges all monitoring.sensor_config config.
+    $config_storage = \Drupal::service('config.storage');
+    $config_factory = \Drupal::service('config.factory');
+    $config_names = $config_storage->listAll('monitoring.sensor_config');
+    foreach ($config_names as $config_name) {
+      $config_entity = $config_factory->getEditable($config_name);
+      $config_entity->delete();
+    }
+  }
 
+  private function create_sensor($id, $label, $description, $value_label, $check_type) {
+    return SensorConfig::create(array(
+      'id' => $id,
+      'label' => $label,
+      'description' => $description,
+      'plugin_id' => 'tide_external_service',
+      'value_label' => $value_label,
+      'category' => 'Baywatch',
+      'status' => TRUE,
+      'caching_time' => 300,
+      'settings' => array(
+        'check_type' => $check_type
+      ),
+      'thresholds' => array(
+        'type' => 'exceeds',
+        'warning' => 0,
+        'critical' => 0,
+      ),
+    ));
+  }
+  public function ensure_sensor_configuration() {
+    if (\Drupal::service('module_handler')->moduleExists('section_purger')) {
+      $sensor = $this->create_sensor(
+        'section_purger',
+        'Section Purger',
+        'Connectivity Status of the Section Purger',
+        'Section Purger',
+        'section',
+      );
+      try {
+        $sensor->save();
+      } catch (EntityStorageException $e) {
+        \Drupal::messenger()->addMessage("section_purger sensor already configured.");
+      }
+    }
+
+    if (\Drupal::service('module_handler')->moduleExists('tide_mailgun')) {
+      $sensor = $this->create_sensor(
+        'tide_mailgun',
+        'Tide Mailgun',
+        'Connectivity Status of Tide Mailgun',
+        'Tide Mailgun',
+        'mailgun',
+      );
+      try {
+        $sensor->save();
+      } catch (EntityStorageException $e) {
+        \Drupal::messenger()->addMessage("tide_mailgun sensor already configured.");
+      }
+    }
+
+    if (\Drupal::service('module_handler')->moduleExists('social_api') && \Drupal::moduleHandler()->moduleExists('social_post')) {
+      $sensor = $this->create_sensor(
+        'twitter_media',
+        'Twitter Media Releases',
+        'Connectivity Status to Twitter API',
+        'Twitter Media Releases',
+        'twitter',
+      );
+      try {
+        $sensor->save();
+      } catch (EntityStorageException $e) {
+        \Drupal::messenger()->addMessage("twitter_media sensor already configured.");
+      }
+    }
+
+    if (\Drupal::service('module_handler')->moduleExists('vicpol_vuelio')) {
+      $sensor = $this->create_sensor(
+        'vicpol_vuelio',
+        'VicPol Vuelio',
+        'Connectivity Status to Vuelio API',
+        'VicPol Vuelio',
+        'vuelio',
+      );
+      try {
+        $sensor->save();
+      } catch (EntityStorageException $e) {
+        \Drupal::messenger()->addMessage("vicpol_vuelio sensor already configured.");
+      }
+    }
+
+  }
 
 }
 

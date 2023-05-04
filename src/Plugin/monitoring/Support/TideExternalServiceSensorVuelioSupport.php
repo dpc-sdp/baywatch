@@ -20,7 +20,7 @@ class TideExternalServiceSensorVuelioSupport implements TideExternalServiceSuppo
     protected $module_handler;
 
     public function __construct(ModuleHandlerInterface $module_handler) {
-      $this->$module_handler = $module_handler;
+      $this->module_handler = $module_handler;
     }
 
     /**
@@ -44,10 +44,17 @@ class TideExternalServiceSensorVuelioSupport implements TideExternalServiceSuppo
     }
 
     public function runCheck(SensorResultInterface &$result){
-      if (!$this->getVuelioService()->vuelioFetchXmlData(TRUE)) {
-        $result->setStatus(SensorResultInterface::STATUS_WARNING);
-        $result->setMessage('Unable to connect to API.');
+      try {
+        if (!$this->getVuelioService()->vuelioFetchXmlData(TRUE)) {
+          $result->setStatus(SensorResultInterface::STATUS_CRITICAL);
+          $result->setMessage('Unable to connect to API.');
+        }
+      } catch (\Error $e) {
+        $result->setStatus(SensorResultInterface::STATUS_CRITICAL);
+        $result->setMessage('Unhandled runtime error caused by vicpol_vuelio!');
+        return;
       }
+
 
       $result->setStatus(SensorResultInterface::STATUS_OK);
       $result->setMessage('OK');
