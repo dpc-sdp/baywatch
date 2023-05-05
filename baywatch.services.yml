@@ -1,0 +1,10 @@
+services:
+  cache_context.healthz_header_token:
+    class: Drupal\baywatch\Cache\Context\HealthzHeaderTokenCacheContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: cache.context }
+  baywatch.access.healthz:
+    class: \Drupal\baywatch\Access\HealthzAccessCheck
+    tags:
+      - { name: access_check, applies_to: _baywatch_healthz_access }

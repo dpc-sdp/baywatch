@@ -1,0 +1,7 @@
+baywatch.endpoint:
+  path: '/healthz'
+  defaults:
+    _controller: '\Drupal\baywatch\Controller\HealthzController::json'
+  methods: [GET]
+  requirements:
+    _baywatch_healthz_access: 'TRUE'
