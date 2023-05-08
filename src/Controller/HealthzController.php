@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class HealthzController extends ControllerBase {
 
     /**
-     * Name of a GET param to get the key.
+     * Minimum period to wait between re-checking sensor status.
      */
     protected const MINIMUM_CHECK_INTERVAL = 30;
 
