@@ -17,11 +17,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class HealthzController extends ControllerBase {
 
     /**
-     * Minimum period to wait between re-checking sensor status.
-     */
-    protected const MINIMUM_CHECK_INTERVAL = 30;
-
-    /**
      * The sensor runner.
      *
      * @var \Drupal\monitoring\SensorRunner
@@ -78,11 +73,6 @@ class HealthzController extends ControllerBase {
       } else {
         $response = new CacheableJsonResponse(['message' => 'All sensors OK!']);
       }
-
-      // 30 second break between sensors runs at a minimum.
-      $cache_metadata = new CacheableMetadata();
-      $cache_metadata->setCacheMaxAge(static::MINIMUM_CHECK_INTERVAL);
-      $response->addCacheableDependency($cache_metadata);
 
       return $response;
     }
