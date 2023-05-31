@@ -44,6 +44,7 @@ function baywatch_install() {
   $baywatch->enable_tide_logs();
   $baywatch->enable_tide_site_alert();
   $baywatch->enable_bay_platform_dependencies();
+  $baywatch->enable_tide_site_theming();
 }
 
 /**
@@ -578,4 +579,12 @@ function baywatch_update_8030() {
 function baywatch_update_8031() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_bay_platform_dependencies();
+}
+
+/**
+ * Enables tide_site_theming module.
+ */
+function baywatch_update_8032() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_tide_site_theming();
 }
