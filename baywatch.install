@@ -588,3 +588,42 @@ function baywatch_update_8032() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_tide_site_theming();
 }
+
+/**
+ * Update section purger plugin to sectionbundled
+ */
+function baywatch_update_8033() {
+  $config_factory = \Drupal::configFactory();
+  $section_purger_id = '0554c341b6';
+
+  // Update section purger plugin settings 
+  $purge_plugins_config = $config_factory->getEditable('purge.plugins');
+  $purgers = $purge_plugins_config->get('purgers');
+
+  if (is_array($purgers)) {
+    foreach ($purgers as &$purger) {
+      if (isset($purger['instance_id']) && $purger['instance_id'] === $section_purger_id) {
+        // Update the plugin_id to section bundled
+        $purger['plugin_id'] = 'sectionbundled';
+        $purge_plugins_config->set('purgers', $purgers);
+        $purge_plugins_config->save();
+        break;
+      }
+    }
+  }
+
+  // Update section purger logger channels settings
+  $purge_logger_channels_config = $config_factory->getEditable('purge.logger_channels');
+  $channels = $purge_logger_channels_config->get('channels');
+  if (is_array($channels)) {
+    foreach ($channels as &$channel) {
+      if (isset($channel['id']) && $channel['id'] === "purger_section_$section_purger_id") {
+        // Update the id to section bundled
+        $channel['id'] = "purger_sectionbundled_$section_purger_id";
+        $purge_logger_channels_config->set('channels', $channels);
+        $purge_logger_channels_config->save();
+        break;
+      }
+    }
+  }
+}
