@@ -1,7 +1,7 @@
 purgers:
   - order_index: 2
     instance_id: 8714ff77fc
-    plugin_id: section
+    plugin_id: sectionbundled
 processors:
   - plugin_id: drush_purge_queue_work
     status: true
