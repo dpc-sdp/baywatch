@@ -594,7 +594,6 @@ function baywatch_update_8032() {
  */
 function baywatch_update_8033() {
   $config_factory = \Drupal::configFactory();
-  $section_purger_id = '0554c341b6';
 
   // Update section purger plugin settings 
   $purge_plugins_config = $config_factory->getEditable('purge.plugins');
@@ -602,7 +601,8 @@ function baywatch_update_8033() {
 
   if (is_array($purgers)) {
     foreach ($purgers as &$purger) {
-      if (isset($purger['instance_id']) && $purger['instance_id'] === $section_purger_id) {
+      // Only update plugin_id for section purger
+      if (isset($purger['plugin_id']) && $purger['plugin_id'] === "section") {
         // Update the plugin_id to section bundled
         $purger['plugin_id'] = 'sectionbundled';
         $purge_plugins_config->set('purgers', $purgers);
@@ -617,9 +617,13 @@ function baywatch_update_8033() {
   $channels = $purge_logger_channels_config->get('channels');
   if (is_array($channels)) {
     foreach ($channels as &$channel) {
-      if (isset($channel['id']) && $channel['id'] === "purger_section_$section_purger_id") {
+      // Only update channel id for section purger
+      if (isset($channel['id']) && strpos($channel['id'], "purger_section_") === 0) {
         // Update the id to section bundled
-        $channel['id'] = "purger_sectionbundled_$section_purger_id";
+        // channel id is in the format of purger_section_{purger_id}
+        $parts = explode('_', $channel['id']);
+        $purger_id = end($parts);
+        $channel['id'] = "purger_sectionbundled_$purger_id";
         $purge_logger_channels_config->set('channels', $channels);
         $purge_logger_channels_config->save();
         break;
