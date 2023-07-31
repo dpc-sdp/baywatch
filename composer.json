@@ -10,7 +10,7 @@
     "drupal/purge_queuer_url": "dev-3289191-automated-drupal-10",
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
-    "drupal/config_split": "^1.4",
+    "drupal/config_split": "^1.9",
     "dpc-sdp/bay_platform_dependencies": "dev-feature/SRM-983-d10-update"
   },
   "repositories": {
