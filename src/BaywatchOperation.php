@@ -270,22 +270,6 @@ class BaywatchOperation {
     }
   }
 
-  public function import_default_section_config() {
-    $configs = [
-      'key.key.section_io_password',
-      'purge.logger_channels',
-      'purge.plugins',
-      'purge_queuer_coretags.settings',
-      'section_purger.settings.8714ff77fc',
-    ];
-    module_load_include('inc', 'tide_core', 'includes/helpers');
-    $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
-    foreach ($configs as $config) {
-      \Drupal::configFactory()->getEditable($config)->delete();
-      _tide_import_single_config($config, $config_location);
-    }
-  }
-
   public function enable_tide_block_inactive_users() {
     $this->baywatch_install_module('tide_block_inactive_users');
     if (\Drupal::moduleHandler()->moduleExists('queue_mail') === TRUE) {

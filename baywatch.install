@@ -30,7 +30,6 @@ function baywatch_install() {
   $baywatch->enable_tide_paragraphs_enhanced_modal();
   $baywatch->set_default_timezone();
   $baywatch->exclude_files_path();
-  $baywatch->import_default_section_config();
   $baywatch->import_default_csp_config();
   $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
