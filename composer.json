@@ -5,18 +5,18 @@
   "license": "GPL-2.0-or-later",
   "require": {
     "drupal/autologout": "^1.3",
-    "drush/drush": "^10.3",
-    "drupal/coi": "^3",
-    "drupal/purge_queuer_url": "^1.0@RC",
+    "drush/drush": "^11",
+    "drupal/coi": "^4.0@RC",
+    "drupal/purge_queuer_url": "dev-3289191-automated-drupal-10",
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
-    "drupal/config_split": "^1.4",
-    "dpc-sdp/bay_platform_dependencies": "^1.0"
+    "drupal/config_split": "^1.9",
+    "dpc-sdp/bay_platform_dependencies": "^2.0.0"
   },
   "repositories": {
     "drupal": {
       "type": "composer",
-      "url": "https://packages.drupal.org/8"
+      "url": "https://packages.drupal.org/10"
     }
   },
   "minimum-stability": "dev",
