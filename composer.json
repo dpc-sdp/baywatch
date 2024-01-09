@@ -10,7 +10,7 @@
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^1.9",
-    "dpc-sdp/bay_platform_dependencies": "^2.0.0"
+    "dpc-sdp/bay_platform_dependencies": "^2.0.2"
   },
   "repositories": {
     "drupal": {
