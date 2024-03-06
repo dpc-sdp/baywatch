@@ -106,6 +106,8 @@ class BaywatchOperation {
             }
           }
         }
+        $active_graylist = $active_graylist ?? [];                                                                                                 
+        $inactive_graylist = $inactive_graylist ?? [];
         $result = array_unique(array_merge($active_graylist, $inactive_graylist));
         $active_config->set('graylist', $result)->save();
       }
