@@ -6,3 +6,40 @@
  * Procedural hooks for baywatch module.
  */
 
+use Drupal\Core\Render\BubbleableMetadata;
+
+/**
+ * Implements hook_token_info().
+ */
+function baywatch_token_info() {
+  $info = [];
+
+  $info['tokens']['baywatch']['k8s-service-account-token'] = [
+    'name' => t('Kubernetes Service Account Token'),
+    'description' => t('A token which retrieves the current value from /var/run/secrets/kubernetes.io/serviceaccount/token.'),
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function baywatch_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+  if ($type == 'baywatch') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'k8s-service-account-token':
+          if (file_exists('/var/run/secrets/kubernetes.io/serviceaccount/token')) {
+            $token = file_get_contents('/var/run/secrets/kubernetes.io/serviceaccount/token');
+            ($token === FALSE) ? $replacements[$original] = '' : $replacements[$original] = $token;
+          } else {
+            $replacements[$original] = '';
+          }
+          break;
+      }
+    }
+  }
+  return $replacements;
+}
