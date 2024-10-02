@@ -10,7 +10,7 @@
     "drupal/queue_mail": "^1",
     "drupal/jwt": "^1.0",
     "drupal/config_split": "^2.0",
-    "dpc-sdp/bay_platform_dependencies": "^2.0.2"
+    "dpc-sdp/bay_platform_dependencies": "dev-feature/redis-newrelic"
   },
   "extra": {
     "enable-patching": true,
