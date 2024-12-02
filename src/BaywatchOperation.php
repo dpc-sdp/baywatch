@@ -409,5 +409,10 @@ class BaywatchOperation {
     $this->baywatch_install_module('tide_site_theming');
   }
 
+  public function enable_ckeditor_tablecol_resize() {
+    // Enable ckeditor_tablecol_resize module.
+    $this->baywatch_install_module('ckeditor_tablecol_resize');
+  }
+
 }
 

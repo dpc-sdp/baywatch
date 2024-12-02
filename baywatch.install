@@ -39,4 +39,13 @@ function baywatch_install() {
   $baywatch->enable_tide_site_alert();
   $baywatch->enable_bay_platform_dependencies();
   $baywatch->enable_tide_site_theming();
+  $baywatch->enable_ckeditor_tablecol_resize();
+}
+
+/**
+ * Enable ckeditor table column resize.
+ */
+function baywatch_update_10001() {
+  $baywatch = new BaywatchOperation();
+  $baywatch->enable_ckeditor_tablecol_resize();
 }
