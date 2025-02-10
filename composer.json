@@ -12,6 +12,10 @@
     "drupal/config_split": "^2.0",
     "dpc-sdp/bay_platform_dependencies": "^2.0.2"
   },
+  "extra": {
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+  },
   "repositories": {
     "drupal": {
       "type": "composer",
