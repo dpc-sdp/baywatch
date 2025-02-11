@@ -14,12 +14,7 @@
   },
   "extra": {
     "enable-patching": true,
-    "composer-exit-on-patch-failure": true,
-    "patches": {
-      "drupal/jwt": {
-        "Deprecated function: strpos(): Passing null to parameter #1 ($haystack) of type string is deprecated - https://www.drupal.org/project/jwt/issues/3298726": "https://www.drupal.org/files/issues/2022-07-22/3298726-3.patch"
-      }
-    }
+    "composer-exit-on-patch-failure": true
   },
   "repositories": {
     "drupal": {
