@@ -40,3 +40,25 @@ function baywatch_install() {
   $baywatch->enable_bay_platform_dependencies();
   $baywatch->enable_tide_site_theming();
 }
+
+/**
+ * Update seckit HSTS max age to 31536000 if SecKit is enabled.
+ */
+function baywatch_update_10001() {
+  $config_storage = \Drupal::service('config.storage.sync');
+
+  if (!\Drupal::moduleHandler()->moduleExists('seckit')) {
+    return;
+  }
+
+  if (!$config_storage->exists('seckit.settings')) {
+    return;
+  }
+
+  // Load and update the config.
+  $config_data = $config_storage->read('seckit.settings');
+  if (isset($config_data['seckit_ssl']['hsts_max_age'])) {
+    $config_data['seckit_ssl']['hsts_max_age'] = 31536000;
+    $config_storage->write('seckit.settings', $config_data);
+  }
+}
