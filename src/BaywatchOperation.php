@@ -313,6 +313,16 @@ class BaywatchOperation {
       ->save();
   }
 
+  public function enable_session_reminder() {
+    // Enable session_reminder module.
+    $this->baywatch_install_module('session_reminder');
+    // set the default warning_threshold.
+    $settings = \Drupal::configFactory()
+      ->getEditable('session_reminder.settings');
+    $settings->set('warning_threshold', 1800)
+      ->save();
+  }
+
   public function enable_tide_content_collection() {
     // Enable tide_content_collection module.
     $this->baywatch_install_module('tide_content_collection');
