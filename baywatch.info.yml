@@ -17,6 +17,7 @@ dependencies:
   - password_policy_username:password_policy_username
   - password_strength:password_strength
   - queue_mail:queue_mail
+  - session_reminder:session_reminder
   - config_split:config_split
   - jwt:jwt
   - bay_platform_dependencies:bay_platform_dependencies
