@@ -5,6 +5,7 @@
   "license": "GPL-2.0-or-later",
   "require": {
     "drupal/autologout": "^2.0",
+    "drupal/session_reminder": "^1.0",
     "drupal/coi": "^4.0@RC",
     "drupal/purge_queuer_url": "dev-3289191-automated-drupal-10",
     "drupal/queue_mail": "^1",
