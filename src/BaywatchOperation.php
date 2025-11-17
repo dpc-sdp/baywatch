@@ -300,21 +300,6 @@ class BaywatchOperation {
     }
   }
 
-  public function enable_tide_spell_checker() {
-    // Enable tide_spell_checker module.
-    $this->baywatch_install_module('tide_spell_checker');
-  }
-
-  public function enable_autologout() {
-    // Enable autologout module.
-    $this->baywatch_install_module('autologout');
-    // set the default timeout value.
-    $settings = \Drupal::configFactory()
-      ->getEditable('autologout.settings');
-    $settings->set('timeout', 72000)
-      ->save();
-  }
-
   public function enable_session_reminder() {
     // Enable session_reminder module.
     $this->baywatch_install_module('session_reminder');
