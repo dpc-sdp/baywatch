@@ -53,7 +53,8 @@ class BaywatchOperation {
     if ($consumers) {
       /** @var \Drupal\consumers\Entity\Consumer $consumer */
       $consumer = reset($consumers);
-      $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
+      $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad');
+      $consumer->set('client_id', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
     }
   }
 
@@ -100,7 +101,7 @@ class BaywatchOperation {
         $active_config = \Drupal::configFactory()->getEditable($config);
         $active_graylist = $active_config->get('graylist');
         if ($config == 'config_split.config_split.dev') {
-          if (in_array('clamav.settings', $active_graylist)) {
+          if ($active_graylist && in_array('clamav.settings', $active_graylist)) {
             if (($key = array_search('clamav.settings', $active_graylist)) !== FALSE) {
               unset($active_graylist[$key]);
             }
@@ -201,6 +202,7 @@ class BaywatchOperation {
   public function remove_previewer_role() {
     $results = \Drupal::entityQuery('user')
       ->condition('roles', 'previewer')
+      ->accessCheck(FALSE)
       ->execute();
     if (!empty($results)) {
       $users = \Drupal::entityTypeManager()->getStorage('user')
