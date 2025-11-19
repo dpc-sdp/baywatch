@@ -53,7 +53,8 @@ class BaywatchOperation {
     if ($consumers) {
       /** @var \Drupal\consumers\Entity\Consumer $consumer */
       $consumer = reset($consumers);
-      $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
+      $consumer->set('uuid', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad');
+      $consumer->set('client_id', 'dc881486-c14a-4b92-a0d0-e5dcd706f5ad')->save();
     }
   }
 
@@ -100,7 +101,7 @@ class BaywatchOperation {
         $active_config = \Drupal::configFactory()->getEditable($config);
         $active_graylist = $active_config->get('graylist');
         if ($config == 'config_split.config_split.dev') {
-          if (in_array('clamav.settings', $active_graylist)) {
+          if ($active_graylist && in_array('clamav.settings', $active_graylist)) {
             if (($key = array_search('clamav.settings', $active_graylist)) !== FALSE) {
               unset($active_graylist[$key]);
             }
@@ -201,6 +202,7 @@ class BaywatchOperation {
   public function remove_previewer_role() {
     $results = \Drupal::entityQuery('user')
       ->condition('roles', 'previewer')
+      ->accessCheck(FALSE)
       ->execute();
     if (!empty($results)) {
       $users = \Drupal::entityTypeManager()->getStorage('user')
@@ -296,21 +298,6 @@ class BaywatchOperation {
     if ($site_name !== 'Victoria Police' && $site_name !== 'Shared Service Provider Content Repository' && $authenticated_module_exist) {
       \Drupal::service('module_installer')->uninstall(['permissions_by_term']);
     }
-  }
-
-  public function enable_tide_spell_checker() {
-    // Enable tide_spell_checker module.
-    $this->baywatch_install_module('tide_spell_checker');
-  }
-
-  public function enable_autologout() {
-    // Enable autologout module.
-    $this->baywatch_install_module('autologout');
-    // set the default timeout value.
-    $settings = \Drupal::configFactory()
-      ->getEditable('autologout.settings');
-    $settings->set('timeout', 72000)
-      ->save();
   }
 
   public function enable_session_reminder() {

@@ -31,7 +31,6 @@ function baywatch_install() {
   $baywatch->set_default_timezone();
   $baywatch->exclude_files_path();
   $baywatch->import_default_csp_config();
-  $baywatch->enable_tide_spell_checker();
   $baywatch->enable_autologout();
   $baywatch->enable_session_reminder();
   $baywatch->enable_coi();
