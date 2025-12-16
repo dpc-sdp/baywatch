@@ -70,3 +70,12 @@ function baywatch_update_10002() {
   $baywatch = new BaywatchOperation();
   $baywatch->enable_session_reminder();
 }
+
+/**
+ * Uninstall jwt module.
+ */
+function baywatch_update_10003() {
+  if (\Drupal::service('module_handler')->moduleExists('jwt')) {
+    \Drupal::service('module_installer')->uninstall('jwt');
+  }
+}
