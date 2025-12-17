@@ -12,7 +12,7 @@ use Drupal\baywatch\BaywatchOperation;
  */
 function baywatch_install() {
   if (\Drupal::service('module_handler')->moduleExists('bay')) {
-    \Drupal::service('module_installer')->uninstall('bay');
+    \Drupal::service('module_installer')->uninstall(['bay']);
   }
   $baywatch = new BaywatchOperation();
   $baywatch->import_sdpa_password_policy();
@@ -76,6 +76,6 @@ function baywatch_update_10002() {
  */
 function baywatch_update_10003() {
   if (\Drupal::service('module_handler')->moduleExists('jwt')) {
-    \Drupal::service('module_installer')->uninstall('jwt');
+    \Drupal::service('module_installer')->uninstall(['jwt']);
   }
 }
