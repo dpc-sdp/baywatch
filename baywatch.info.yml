@@ -2,7 +2,7 @@ name: baywatch
 description: 'Configuration for integration with Bay hosting platform'
 type: module
 package: Other
-core_version_requirement: ^9 || ^10
+core_version_requirement: ^11
 dependencies:
   - shield:shield
   - purge:purge_processor_cron
