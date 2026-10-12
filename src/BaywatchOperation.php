@@ -72,9 +72,11 @@ class BaywatchOperation {
       $shield_settings->set('paths', $path);
       $shield_settings->save();
     }
-    // Add new permission to previewer role.
-    $permissions = ['bypass site restriction'];
-    user_role_grant_permissions('previewer', $permissions);
+    // Only grant permissions supplied by an installed module.
+    if (\Drupal::moduleHandler()->moduleExists('tide_site_restriction')) {
+      $permissions = ['bypass site restriction'];
+      user_role_grant_permissions('previewer', $permissions);
+    }
   }
 
   public function enable_config_split() {
@@ -83,7 +85,7 @@ class BaywatchOperation {
       'config_split.config_split.dev' => 'config_split',
       'config_split.config_split.local' => 'config_split',
     ];
-    module_load_include('inc', 'tide_core', 'includes/helpers');
+    \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/helpers');
     $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     // Check if field already exported to config/sync.
     foreach ($configs as $config => $type) {
@@ -126,10 +128,15 @@ class BaywatchOperation {
   }
 
   public function import_authenticated_content_key() {
+    // The legacy key's optional configuration depends on the JWT module.
+    if (!\Drupal::moduleHandler()->moduleExists('jwt')) {
+      return;
+    }
+
     $configs = [
       'key.key.authenticated_content' => 'key',
     ];
-    module_load_include('inc', 'tide_core', 'includes/helpers');
+    \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/helpers');
     $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     // Check if field already exported to config/sync.
     foreach ($configs as $config => $type) {
@@ -155,10 +162,10 @@ class BaywatchOperation {
 
     foreach ($tables as $table) {
       try {
-        \Drupal::messenger()->addMessage("Dropping obsolete table ${table}");
+        \Drupal::messenger()->addMessage("Dropping obsolete table {$table}");
         \Drupal::database()->query(sprintf("DROP TABLE %s;", $table));
       } catch (\Exception $e) {
-        \Drupal::messenger()->addMessage("Error when dropping table ${table}");
+        \Drupal::messenger()->addMessage("Error when dropping table {$table}");
         \Drupal::logger('baywatch')->error($e->getMessage());
       }
     }
@@ -186,7 +193,7 @@ class BaywatchOperation {
     $configs = [
       'password_policy.password_policy.password_policy_sdpa' => 'password_policy',
     ];
-    module_load_include('inc', 'tide_core', 'includes/helpers');
+    \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/helpers');
     $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     foreach ($configs as $config => $type) {
       $config_read = _tide_read_config($config, $config_location, TRUE);
@@ -300,6 +307,13 @@ class BaywatchOperation {
     }
   }
 
+  /**
+   * Enable automatic logout.
+   */
+  public function enable_autologout() {
+    $this->baywatch_install_module('autologout');
+  }
+
   public function enable_session_reminder() {
     // Enable session_reminder module.
     $this->baywatch_install_module('session_reminder');
@@ -379,7 +393,7 @@ class BaywatchOperation {
 
   // Import default SDP specific settings.
   public function import_default_csp_config() {
-    module_load_include('inc', 'tide_core', 'includes/helpers');
+    \Drupal::moduleHandler()->loadInclude('tide_core', 'inc', 'includes/helpers');
     $config_location = [\Drupal::service('extension.list.module')->getPath('baywatch') . '/config/optional'];
     $read = _tide_read_config('seckit.settings', $config_location, FALSE);
     $config_storage = \Drupal::service('config.storage');
